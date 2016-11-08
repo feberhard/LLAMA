@@ -8,14 +8,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--[START fcm_default_icon] -->
+
+        <!-- [START fcm_default_icon] -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/llama_launcher" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-        <!--[END fcm_default_icon] -->
+        <!-- [END fcm_default_icon] -->
 
         <activity
             android:name=".MainActivity"
@@ -37,6 +38,14 @@
             android:name=".MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true" />
+
+        <activity android:name=".auth.SignInActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
     </application>
 
 </manifest>
