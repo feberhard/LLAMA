@@ -45,11 +45,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import org.llama.llama.MainActivity;
 import org.llama.llama.R;
 
-public class EmailPasswordActivity extends BaseActivity implements
+public class SignInActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
-    private static final String TAG = "EmailPassword";
+    private static final String TAG = "SignIn";
     private static final int RC_SIGN_IN = 9001;
 
     private TextView mStatusTextView;
@@ -66,7 +66,7 @@ public class EmailPasswordActivity extends BaseActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emailpassword);
+        setContentView(R.layout.activity_signin);
 
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
@@ -158,7 +158,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
 //                        else{
@@ -187,7 +187,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(EmailPasswordActivity.this, R.string.auth_failed,
+                            Toast.makeText(SignInActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -215,7 +215,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, R.string.auth_failed,
+                            Toast.makeText(SignInActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -327,7 +327,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         } else if (i == R.id.sign_out_button) {
             signOut();
         } else if (i == R.id.auth_next_button) {
-            startActivity(new Intent(EmailPasswordActivity.this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
         } else if (i == R.id.google_sign_in_button) {
             googleSignIn();
         }

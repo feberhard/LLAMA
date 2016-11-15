@@ -16,7 +16,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.llama.llama.auth.EmailPasswordActivity;
+import org.llama.llama.auth.SignInActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         } else if(id == R.id.nav_change_user){
-            startActivity(new Intent(MainActivity.this, EmailPasswordActivity.class));
+            startActivity(new Intent(MainActivity.this, SignInActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();  // Always call the superclass method first
 
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
-            startActivity(new Intent(MainActivity.this, EmailPasswordActivity.class));
+            startActivity(new Intent(MainActivity.this, SignInActivity.class));
         }
     }
 }
