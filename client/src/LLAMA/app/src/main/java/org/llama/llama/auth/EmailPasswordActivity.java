@@ -79,6 +79,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         findViewById(R.id.email_create_account_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
+        findViewById(R.id.auth_next_button).setOnClickListener(this);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -299,6 +300,8 @@ public class EmailPasswordActivity extends BaseActivity implements
 
             findViewById(R.id.google_sign_in_button).setVisibility(View.GONE);
 
+            findViewById(R.id.or_signin_with).setVisibility(View.GONE);
+
             findViewById(R.id.auth_next_button).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
@@ -309,6 +312,8 @@ public class EmailPasswordActivity extends BaseActivity implements
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
 
             findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.or_signin_with).setVisibility(View.VISIBLE);
+            findViewById(R.id.auth_next_button).setVisibility(View.GONE);
         }
     }
 
