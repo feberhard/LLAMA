@@ -17,13 +17,22 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.llama.llama.auth.SignInActivity;
+import org.llama.llama.services.ChatService;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @Inject
+    ChatService chatService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MyApp)getApplication()).getServiceComponent().inject(this);
+
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            chatService.read();
 
         } else if (id == R.id.nav_slideshow) {
 

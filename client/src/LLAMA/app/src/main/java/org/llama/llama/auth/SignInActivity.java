@@ -43,11 +43,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.llama.llama.MainActivity;
+import org.llama.llama.MyApp;
 import org.llama.llama.R;
+import org.llama.llama.services.DaggerServiceComponent;
+import org.llama.llama.services.ServiceComponent;
+import org.llama.llama.services.UserService;
+
+import javax.inject.Inject;
 
 public class SignInActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
+
+    @Inject
+    UserService userService;
 
     private static final String TAG = "SignIn";
     private static final int RC_SIGN_IN = 9001;
@@ -62,10 +71,18 @@ public class SignInActivity extends BaseActivity implements
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
 
+    @Inject
+    public SignInActivity(){
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((MyApp)getApplication()).getServiceComponent().inject(this);
+
         setContentView(R.layout.activity_signin);
 
         // Views
@@ -161,9 +178,6 @@ public class SignInActivity extends BaseActivity implements
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-//                        else{
-//                            nextButton.setVisibility(View.VISIBLE);
-//                        }
                         hideProgressDialog();
                     }
                 });
@@ -217,9 +231,7 @@ public class SignInActivity extends BaseActivity implements
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(SignInActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
-                        }
 
-                        if (!task.isSuccessful()) {
                             mStatusTextView.setText(R.string.auth_failed);
                         }
                         hideProgressDialog();
