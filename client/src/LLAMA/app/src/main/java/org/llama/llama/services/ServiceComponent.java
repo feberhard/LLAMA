@@ -2,6 +2,7 @@ package org.llama.llama.services;
 
 import org.llama.llama.AppContextModule;
 import org.llama.llama.MainActivity;
+import org.llama.llama.MyFirebaseInstanceIDService;
 import org.llama.llama.auth.SignInActivity;
 
 import javax.inject.Singleton;
@@ -17,4 +18,5 @@ import dagger.Component;
 public interface ServiceComponent {
     void inject(SignInActivity signInActivity);
     void inject(MainActivity mainActivity);
+    void inject(MyFirebaseInstanceIDService myFirebaseInstanceIDService);
 }

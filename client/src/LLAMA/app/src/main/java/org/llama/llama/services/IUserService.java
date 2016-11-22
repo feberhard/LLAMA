@@ -8,4 +8,6 @@ public interface IUserService {
     String getCurrentUserId();
 
     void getUserInfo(String userId);
+
+    void updateFirebaseInstanceIdToken(String token);
 }

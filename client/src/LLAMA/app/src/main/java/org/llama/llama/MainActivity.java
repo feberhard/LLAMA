@@ -15,9 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.llama.llama.auth.SignInActivity;
 import org.llama.llama.services.ChatService;
+import org.llama.llama.services.IUserService;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     ChatService chatService;
+
+    @Inject
+    IUserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +103,8 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             chatService.read();
-
         } else if (id == R.id.nav_slideshow) {
-
+            userService.updateFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

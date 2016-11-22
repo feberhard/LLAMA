@@ -32,7 +32,7 @@ public class ChatService implements IChatService {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String name =dataSnapshot.child("name").getValue(String.class);
+                String name = dataSnapshot.child("name").getValue(String.class);
 
                 Object obj = dataSnapshot.getValue();
                 Log.d(TAG, "Name is: " + name);
