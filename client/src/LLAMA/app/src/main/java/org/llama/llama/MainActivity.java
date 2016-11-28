@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.llama.llama.auth.SignInActivity;
+import org.llama.llama.map.MapsActivity;
 import org.llama.llama.services.ChatService;
 import org.llama.llama.services.IUserService;
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
             userService.updateFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
         } else if (id == R.id.nav_manage) {
-
+            startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
