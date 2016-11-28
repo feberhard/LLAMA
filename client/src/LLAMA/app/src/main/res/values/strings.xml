@@ -28,4 +28,5 @@
 
     <string name="emailpassword_status_fmt">Email User: %s</string>
     <string name="emailpassword_title_text">Email and Password</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
