@@ -13,14 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.llama.llama.auth.SignInActivity;
 import org.llama.llama.map.MapsActivity;
+import org.llama.llama.model.Chat;
 import org.llama.llama.services.ChatService;
 import org.llama.llama.services.IUserService;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,11 +37,12 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     IUserService userService;
+    private List<Chat> chats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MyApp)getApplication()).getServiceComponent().inject(this);
+        ((MyApp) getApplication()).getServiceComponent().inject(this);
 
 
         setContentView(R.layout.activity_main);
@@ -112,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        } else if(id == R.id.nav_change_user){
+        } else if (id == R.id.nav_change_user) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
         }
 
@@ -126,8 +132,16 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
         }
+
+
+        this.chats = chatService.getAvailableChats();
+        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
+
+
+        ListView chatList = (ListView)findViewById(R.id.chat_list);
+        chatList.setAdapter(chatsAdapter);
     }
 }

@@ -9,12 +9,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.llama.llama.model.Chat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Felix on 21.11.2016.
  */
 
 public class ChatService implements IChatService {
     private static final String TAG = "ChatService";
+
+
 
     public void write() {
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -57,5 +64,17 @@ public class ChatService implements IChatService {
 //                Log.d(TAG, "Failed to read value.", databaseError.toException());
 //            }
 //        });
+    }
+
+    @Override
+    public List<Chat> getAvailableChats() {
+        List<Chat> chats = new ArrayList<>();
+        chats.add(new Chat("Werner van llama"));
+        chats.add(new Chat("Sergeant llama"));
+        chats.add(new Chat("Llama McLlamaface"));
+        chats.add(new Chat("Kuzco"));
+        chats.add(new Chat("Apollo 13", "ist ein kluges Tier"));
+
+        return chats;
     }
 }
