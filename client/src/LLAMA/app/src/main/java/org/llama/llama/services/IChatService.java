@@ -11,4 +11,6 @@ import java.util.List;
 public interface IChatService {
 
     List<Chat> getAvailableChats();
+
+    void getConversation(String chatId);
 }

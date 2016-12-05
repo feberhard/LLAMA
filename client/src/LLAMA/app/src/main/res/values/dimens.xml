@@ -10,4 +10,12 @@
     <dimen name="icon_top_margin">24dp</dimen>
     <dimen name="icon_bottom_margin">24dp</dimen>
     <dimen name="title_bottom_margin">16dp</dimen>
+    <dimen name="text_size_message_item_metadata">10dp</dimen>
+    <dimen name="message_item_receipt_margin" >10dp</dimen>
+    <dimen name="message_item_cell_min_width" >10dp</dimen>
+    <dimen name="message_item_cell_min_height" >10dp</dimen>
+    <dimen name="padding_normal" >10dp</dimen>
+    <dimen name="message_cluster_space_gap" >10dp</dimen>
+    <dimen name="message_item_time_group_padding_top" >10dp</dimen>
+    <dimen name="message_item_time_group_padding_bottom" >10dp</dimen>
 </resources>

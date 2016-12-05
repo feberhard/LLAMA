@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.llama.llama.auth.SignInActivity;
+import org.llama.llama.chat.ChatActivity;
 import org.llama.llama.map.MapsActivity;
 import org.llama.llama.model.Chat;
 import org.llama.llama.services.ChatService;
@@ -30,7 +32,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     @Inject
     ChatService chatService;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity
     @Inject
     IUserService userService;
     private List<Chat> chats;
+
+    private ListView chatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        chatList = (ListView) findViewById(R.id.chat_list);
+        chatList.setClickable(true);
+        chatList.setOnItemClickListener(this);
     }
 
     @Override
@@ -141,7 +149,17 @@ public class MainActivity extends AppCompatActivity
         ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
 
 
-        ListView chatList = (ListView)findViewById(R.id.chat_list);
         chatList.setAdapter(chatsAdapter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Chat chat = (Chat) chatList.getItemAtPosition(position);
+
+        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+        Bundle b = new Bundle();
+        b.putString("chatId", chat.getId());
+        intent.putExtras(b);
+        startActivity(intent);
     }
 }

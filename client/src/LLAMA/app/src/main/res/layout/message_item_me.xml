@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/time_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/message_item_time_group_padding_bottom"
+        android:paddingTop="@dimen/message_item_time_group_padding_top">
+
+        <TextView
+            android:id="@+id/time_group_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[day]"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/text_size_message_item_metadata"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/time_group_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[time]"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/text_size_message_item_metadata" />
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/cluster_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/message_cluster_space_gap" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <android.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/cell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_normal"
+            android:minHeight="@dimen/message_item_cell_min_height"
+            android:minWidth="@dimen/message_item_cell_min_width" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/receipt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/message_item_receipt_margin"
+        android:text="@string/message_item_delivered"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/text_size_message_item_metadata" />
+
+</LinearLayout>

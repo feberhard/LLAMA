@@ -69,12 +69,17 @@ public class ChatService implements IChatService {
     @Override
     public List<Chat> getAvailableChats() {
         List<Chat> chats = new ArrayList<>();
-        chats.add(new Chat("Werner van llama"));
+        chats.add(new Chat("Werner van llama", "May the llama be with you"));
         chats.add(new Chat("Sergeant llama"));
         chats.add(new Chat("Llama McLlamaface"));
         chats.add(new Chat("Kuzco"));
         chats.add(new Chat("Apollo 13", "ist ein kluges Tier"));
 
         return chats;
+    }
+
+    @Override
+    public void getConversation(String chatId) {
+
     }
 }
