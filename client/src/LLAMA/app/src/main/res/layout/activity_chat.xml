@@ -14,35 +14,34 @@
         android:id="@+id/message_list_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/message_composer"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btn_send_message" />
+        android:layout_alignParentTop="true" />
 
-    <!--<ListView-->
-        <!--android:id="@+id/message_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_above="@+id/btn_send_message" />-->
-
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/message_composer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Message"
-        android:ems="10"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/editTextNewMessage" />
+        android:layout_alignParentStart="true">
 
-    <Button
-        android:text="Send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/btn_send_message" />
+        <EditText
+            android:id="@+id/editTextNewMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="@string/message_composer_hint" />
 
+        <Button
+            android:id="@+id/btn_send_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/message_composer_send"
+            android:textSize="@dimen/button_text_size"/>
+    </LinearLayout>
 
 </RelativeLayout>

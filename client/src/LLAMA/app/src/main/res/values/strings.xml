@@ -30,4 +30,7 @@
     <string name="emailpassword_title_text">Email and Password</string>
     <string name="title_activity_maps">Map</string>
     <string name="message_item_delivered">delivered</string>
+    <string name="send">Send</string>
+    <string name="message_composer_hint">Message</string>
+    <string name="message_composer_send">Send</string>
 </resources>
