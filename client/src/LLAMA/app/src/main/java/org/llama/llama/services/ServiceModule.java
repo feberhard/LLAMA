@@ -29,6 +29,12 @@ public class ServiceModule {
 
     @Provides
     @Singleton
+    static IChatService providesIChatService() {
+        return new ChatService();
+    }
+
+    @Provides
+    @Singleton
     static ChatService providesChatService() {
         return new ChatService();
     }

@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_share) {
+            this.chatService.read();
 
         } else if (id == R.id.nav_send) {
 
