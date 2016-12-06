@@ -8,7 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_supervisor_account_black_24dp"
-        android:id="@+id/imgChatOverview" />
+        android:id="@+id/imgChatOverview"
+        android:adjustViewBounds="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
