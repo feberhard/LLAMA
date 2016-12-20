@@ -1,35 +1,31 @@
-package org.llama.llama.model;
+package org.llama.llama.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Felix on 22.11.2016.
  */
 @IgnoreExtraProperties
 public class User {
-    public String id;
-    //chats
-    //contacts
+
+    public HashMap<String, Boolean> chats = new HashMap<>();
+    public HashMap<String, Boolean> contacts = new HashMap<>();
     public String country;
     public String defaultLanguage;
     public String email;
     public String firebaseInstanceIdToken;
-    //languages
-    //location
+    public HashMap<String, Boolean> languages = new HashMap<>();
+    public List<Double> location = new ArrayList<>();
     public String mood;
     public String name;
     public String username;
 
     public User(){
 
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCountry() {

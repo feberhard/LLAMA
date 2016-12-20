@@ -9,7 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.llama.llama.model.Chat;
+import org.llama.llama.models.Chat;
 
 import java.util.ArrayList;
 import java.util.List;

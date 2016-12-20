@@ -1,6 +1,5 @@
 package org.llama.llama.chat;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,30 +12,23 @@ import com.google.firebase.database.Query;
 
 import org.llama.llama.AppConstant;
 import org.llama.llama.R;
-import org.llama.llama.model.Message;
-import org.llama.llama.services.IUserService;
+import org.llama.llama.models.Message;
 
-import java.util.List;
-
-public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IUserService>> {
+public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message>> {
     private static final String TAG = ChatAdapter.class.getSimpleName();
 
     private LayoutInflater inflater = null;
     //    private List<Message> messages;
     private FirebaseArray mSnapshots;
-    private final String userId;
-    private IUserService userService;
 
 //    public ChatAdapter(Context context, List<Message> messages) {
 //        this.messages = messages;
 //        inflater = LayoutInflater.from(context);
 //    }
 
-    public ChatAdapter(FirebaseArray snapshots, String userId, IUserService userService) {
+    public ChatAdapter(FirebaseArray snapshots) {
 //        inflater = LayoutInflater.from(context);
-        this.userId = userId;
-        this.mSnapshots = snapshots;
-        this.userService = userService;
+        mSnapshots = snapshots;
 
         mSnapshots.setOnChangedListener(new FirebaseArray.OnChangedListener() {
             @Override
@@ -66,12 +58,12 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
         });
     }
 
-    public ChatAdapter(Query ref, String userId, IUserService userService) {
-        this(new FirebaseArray(ref), userId, userService);
+    public ChatAdapter(Query ref) {
+        this(new FirebaseArray(ref));
     }
 
     @Override
-    public BaseViewHolder<Message, IUserService> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<Message> onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case AppConstant.MESSAGE_ITEM_ME:
                 return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_me, parent, false));
@@ -82,9 +74,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder<Message, IUserService> holder, int position) {
+    public void onBindViewHolder(BaseViewHolder<Message> holder, int position) {
         Message msg = getItem(position);
-        holder.setDataOnView(msg, this.userService);
+        holder.setDataOnView(msg);
     }
 
     @Override
@@ -107,9 +99,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
     private int getMessageType(Message msg) {
         if (msg.getViewType() == -1) {
             //TODO gets called and calculated pretty often
-            if(msg.getUser().equals(this.userId)){
+            if (Math.random() < 0.5) {
                 msg.setViewType(AppConstant.MESSAGE_ITEM_ME);
-            }else{
+            } else {
                 msg.setViewType(AppConstant.MESSAGE_ITEM_THEM);
             }
         }

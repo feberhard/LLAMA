@@ -72,6 +72,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.llama.llama.MainActivity" />
         </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings" />
     </application>
 
 </manifest>

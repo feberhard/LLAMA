@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="2500"
+   height="1815"
+   viewBox="0 0 2000 1452"
+   preserveAspectRatio="xMidYMid meet"
+   id="svg2"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="Proposed_Yiddish_flag.svg">
+  <defs
+     id="defs30" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     id="namedview28"
+     showgrid="false"
+     inkscape:zoom="0.125"
+     inkscape:cx="780.97051"
+     inkscape:cy="444.72548"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata4">
+Created by potrace 1.11, written by Peter Selinger 2001-2013
+<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke:none"
+     id="rect3007"
+     width="2000"
+     height="1452"
+     x="0"
+     y="0" />
+  <path
+     style="fill:#000000;stroke:none"
+     inkscape:connector-curvature="0"
+     id="path8"
+     d="m -0.071875,364.10937 1999.999975,0 0,-227 -1999.999975,0 z"
+     sodipodi:nodetypes="ccccc" />
+  <path
+     style="fill:#000000;stroke:none"
+     inkscape:connector-curvature="0"
+     id="path26"
+     d="m -0.071875,1318.1094 1999.999975,0 0,-227 -1999.999975,0 z"
+     sodipodi:nodetypes="ccccc" />
+  <path
+     id="path3862"
+     style="fill:#000000;stroke:none"
+     d="m 750.33353,487.07587 -22.2,30 -28.6,0 -22.2,-30 z m 86.9094,0 -22.2,30 -28.6,0 -22.2,-30 z m 86.9093,0 -22.2,30 -28.6,0 -22.2,-30 z m 325.37047,0 22.2,30 28.6,0 22.2,-30 z m -86.9094,0 22.2,30 28.6,0 22.2,-30 z m -86.9093,0 22.2,30 28.6,0 22.2,-30 z m -90.07587,13.9835 0,118.975 c -47.45368,-6.88303 -83.67504,-47.52711 -83.67504,-96.95 l -28.6,0 c 0,64.91075 49.22448,118.64377 112.27504,125.775 l 0,60.2 c -95.75072,-7.27541 -170.9,-87.02698 -170.9,-184.675 l -28.8,0 c 0,113.2193 88.32024,206.16962 199.7,213.55001 l 0,56.54999 c -143.61016,-7.41862 -257.5,-125.92102 -257.5,-271.39999 l -28.6,0 c 0,160.94078 126.98808,292.54748 286.1,300.02499 l 0,106.97505 -141.3,31.5 0,19.57496 311.19997,0 0,-19.57496 -141.3,-31.5 0,-106.97505 c 159.1119,-7.47752 286.1,-139.08421 286.1,-300.02499 l -28.6,0 c 0,145.47897 -113.8899,263.98138 -257.5,271.39999 l 0,-56.54999 c 111.3798,-7.38039 199.7,-100.33071 199.7,-213.55001 l -28.8,0 c 0,97.64802 -75.1493,177.39959 -170.9,184.67501 l 0,-60.20001 c 63.0506,-7.13122 112.275,-60.86424 112.275,-125.77499 l -28.6,0 c 0,49.42289 -36.2213,90.06696 -83.675,96.95 l 0,-118.975 -28.59997,0 z m -22.2,-35.95 22.2,30 28.59997,0 22.2,-30 z"
+     inkscape:connector-curvature="0" />
+</svg>

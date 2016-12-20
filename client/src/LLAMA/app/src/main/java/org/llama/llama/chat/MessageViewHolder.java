@@ -3,17 +3,14 @@ package org.llama.llama.chat;
 import android.view.View;
 import android.widget.TextView;
 
-import org.jdeferred.DoneCallback;
 import org.llama.llama.R;
-import org.llama.llama.model.Message;
-import org.llama.llama.model.User;
-import org.llama.llama.services.IUserService;
+import org.llama.llama.models.Message;
 
 /**
  * Created by Felix on 6.12.2016.
  */
 
-public class MessageViewHolder extends BaseViewHolder<Message, IUserService> {
+public class MessageViewHolder extends BaseViewHolder<Message> {
     public final TextView txtUsername;
     public final TextView txtMessage;
 
@@ -25,17 +22,8 @@ public class MessageViewHolder extends BaseViewHolder<Message, IUserService> {
     }
 
     @Override
-    public void setDataOnView(Message msg, IUserService userService) {
+    public void setDataOnView(Message msg) {
+        txtUsername.setText(msg.getUser());
         txtMessage.setText(msg.getMessage());
-//        txtUsername.setText(msg.getUser());
-
-        userService.getUserInfo(msg.getUser()).done(new DoneCallback() {
-            @Override
-            public void onDone(Object result) {
-                txtUsername.setText(((User)result).getName());
-            }
-        });
-//        GetUserInfoAsyncTask task = new GetUserInfoAsyncTask(msg.getUser(), this.txtUsername, userService);
-//        task.execute();
     }
 }
