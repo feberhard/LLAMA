@@ -17,14 +17,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="TextView"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txtChatName"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <TextView
-            android:text="TextView"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txtLastMessage" />

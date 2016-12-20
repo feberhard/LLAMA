@@ -1,6 +1,7 @@
 package org.llama.llama;
 
 import android.app.Application;
+import android.content.Context;
 
 import org.llama.llama.services.DaggerServiceComponent;
 import org.llama.llama.services.ServiceComponent;
@@ -12,10 +13,12 @@ import org.llama.llama.services.ServiceModule;
 
 public class MyApp extends Application {
     private ServiceComponent mServiceComponent;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        MyApp.context = getApplicationContext();
 
 //        mServiceComponent = DaggerServiceComponent.builder()
 //                .appContextModule(new AppContextModule(this))
@@ -27,5 +30,9 @@ public class MyApp extends Application {
 
     public ServiceComponent getServiceComponent(){
         return mServiceComponent;
+    }
+
+    public static Context getAppContext(){
+        return MyApp.context;
     }
 }
