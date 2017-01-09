@@ -7,4 +7,5 @@ package org.llama.llama;
 public class AppConstant {
     public static final int MESSAGE_ITEM_ME = 0;
     public static final int MESSAGE_ITEM_THEM = 1;
+    public static final int MULTIMEDIA_ITEM = 2;
 }

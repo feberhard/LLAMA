@@ -152,11 +152,11 @@ public class MainActivity extends AppCompatActivity
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
+        }else {
+
+
+            updateChatList();
         }
-
-
-        updateChatList();
-
 //        this.chats = chatService.getAvailableChats();
 //        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
 //

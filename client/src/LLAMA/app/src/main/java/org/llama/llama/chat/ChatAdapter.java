@@ -76,7 +76,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
             case AppConstant.MESSAGE_ITEM_ME:
                 return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_me, parent, false));
             case AppConstant.MESSAGE_ITEM_THEM:
-                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false));
+                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false), "de"); // TODO use prefered language
+            case AppConstant.MULTIMEDIA_ITEM:
+                return new MultimediaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.multimedia_item, parent, false));
         }
         return null;
     }
@@ -96,10 +98,10 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
     @Override
     public int getItemViewType(int position) {
         Message msg = getItem(position);
+        if (msg != null) {
 
-        if (msg != null)
             return getMessageType(msg);
-
+        }
         return super.getItemViewType(position);
     }
 
@@ -107,10 +109,14 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
     private int getMessageType(Message msg) {
         if (msg.getViewType() == -1) {
             //TODO gets called and calculated pretty often
-            if(msg.getUser().equals(this.userId)){
-                msg.setViewType(AppConstant.MESSAGE_ITEM_ME);
-            }else{
-                msg.setViewType(AppConstant.MESSAGE_ITEM_THEM);
+            if (!Message.TEXT.equals(msg.getType())) { // multimedia
+                msg.setViewType(AppConstant.MULTIMEDIA_ITEM);
+            } else {
+                if (msg.getUser().equals(this.userId)) {
+                    msg.setViewType(AppConstant.MESSAGE_ITEM_ME);
+                } else {
+                    msg.setViewType(AppConstant.MESSAGE_ITEM_THEM);
+                }
             }
         }
         return msg.getViewType();
