@@ -1,13 +1,21 @@
 package org.llama.llama.model;
 
+import java.util.Map;
+
 /**
  * Created by Felix on 5.12.2016.
  */
 
 public class Message {
+    public static final String TEXT = "text";
+    public static final String MULTIMEDIA = "multimedia";
+
     private String language;
     private String message;
     private String user;
+    private Long timestamp;
+    private Map<String,String> translations;
+    private String type; // text or multimedia
 
     private int viewType = -1;
 
@@ -42,6 +50,31 @@ public class Message {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Map<String, String> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(Map<String, String> translations) {
+        this.translations = translations;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getViewType() {

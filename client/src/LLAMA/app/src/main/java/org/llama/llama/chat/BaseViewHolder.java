@@ -7,10 +7,10 @@ import android.view.View;
  * Created by Felix on 6.12.2016.
  */
 
-public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder{
+public abstract class BaseViewHolder<T, S> extends RecyclerView.ViewHolder{
     public BaseViewHolder(View itemView) {
         super(itemView);
     }
 
-    public abstract void setDataOnView(T data);
+    public abstract void setDataOnView(T data, S service);
 }

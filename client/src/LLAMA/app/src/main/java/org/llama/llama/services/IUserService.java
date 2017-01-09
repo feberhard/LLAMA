@@ -1,8 +1,9 @@
 package org.llama.llama.services;
 
-import com.google.firebase.database.ValueEventListener;
-
+import org.jdeferred.Promise;
 import org.llama.llama.model.User;
+
+import java.util.concurrent.Future;
 
 /**
  * Created by Felix on 21.11.2016.
@@ -11,9 +12,9 @@ import org.llama.llama.model.User;
 public interface IUserService {
     String getCurrentUserId();
 
-    void getUserInfo(String userId, ValueEventListener vel);
+    Promise getUserInfo(final String userId);
+
+    void updateUserCache(User user);
 
     void updateFirebaseInstanceIdToken(String token);
-
-    void updateProfile(User user);
 }

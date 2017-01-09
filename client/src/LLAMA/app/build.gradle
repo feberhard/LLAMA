@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileOptions.incremental = false
+//    compileOptions.incremental = false
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
@@ -30,14 +30,18 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    //https://github.com/jdeferred/jdeferred
+    compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.google.firebase:firebase-core:9.8.0'
     compile 'com.google.firebase:firebase-messaging:9.8.0'
     compile 'com.google.firebase:firebase-auth:9.8.0'
-//    compile 'com.google.android.gms:play-services-auth:9.8.0'
+    compile 'com.google.android.gms:play-services-auth:9.8.0'
     compile 'com.google.dagger:dagger:2.7'
     compile 'com.google.firebase:firebase-database:9.8.0'
+//    compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.android.gms:play-services:9.8.0'
 //    compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.androidmapsextensions:android-maps-extensions:2.3.0'

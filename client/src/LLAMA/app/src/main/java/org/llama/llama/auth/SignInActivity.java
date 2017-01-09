@@ -45,6 +45,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import org.llama.llama.MainActivity;
 import org.llama.llama.MyApp;
 import org.llama.llama.R;
+import org.llama.llama.services.IUserService;
 import org.llama.llama.services.UserService;
 
 import javax.inject.Inject;
@@ -54,7 +55,7 @@ public class SignInActivity extends BaseActivity implements
         View.OnClickListener {
 
     @Inject
-    UserService userService;
+    IUserService userService;
 
     private static final String TAG = "SignIn";
     private static final int RC_SIGN_IN = 9001;

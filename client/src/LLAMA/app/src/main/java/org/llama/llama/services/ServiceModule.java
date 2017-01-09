@@ -17,25 +17,13 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    static UserService provideUserService() {
-        return new UserService();
-    }
-
-    @Provides
-    @Singleton
-    static IUserService providesIUserService(){
+    static IUserService providesIUserService() {
         return new UserService();
     }
 
     @Provides
     @Singleton
     static IChatService providesIChatService() {
-        return new ChatService();
-    }
-
-    @Provides
-    @Singleton
-    static ChatService providesChatService() {
         return new ChatService();
     }
 }
