@@ -10,7 +10,7 @@ public class Chat {
     private String lastMessage;
     private String owner;
     private Long timestamp;
-    private String type; // TODO enum: group, dialog
+    private ChatType type;
 
     public Chat() {
     }
@@ -66,11 +66,11 @@ public class Chat {
         this.timestamp = timestamp;
     }
 
-    public String getType() {
+    public ChatType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ChatType type) {
         this.type = type;
     }
     //</editor-fold>

@@ -25,6 +25,7 @@
     <string name="google_title_text">Google Sign In</string>
     <string name="next">Next</string>
 
+    <string name="location_not_enabled">Location has to be allowed to use this feature!</string>
 
     <string name="emailpassword_status_fmt">Email User: %s</string>
     <string name="emailpassword_title_text">Email and Password</string>
