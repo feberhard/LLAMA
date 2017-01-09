@@ -18,17 +18,27 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.llama.llama.auth.SignInActivity;
 import org.llama.llama.chat.ChatActivity;
 import org.llama.llama.map.MapsActivity;
-import org.llama.llama.models.Chat;
-import org.llama.llama.services.ChatService;
+import org.llama.llama.model.Chat;
+import org.llama.llama.services.IChatService;
 import org.llama.llama.services.IUserService;
 import org.llama.llama.settings.SettingsActivity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     @Inject
-    ChatService chatService;
+    IChatService chatService;
 
     @Inject
     IUserService userService;
@@ -48,7 +58,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((MyApp) getApplication()).getServiceComponent().inject(this);
-
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,16 +128,16 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            chatService.read();
+//            chatService.read();
         } else if (id == R.id.nav_slideshow) {
             userService.updateFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_share) {
-            this.chatService.read();
+//            this.chatService.read();
 
         } else if (id == R.id.nav_send) {
-
+            this.updateChatList();
         } else if (id == R.id.nav_change_user) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
         }
@@ -145,14 +154,16 @@ public class MainActivity extends AppCompatActivity
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
+        }else {
+
+
+            updateChatList();
         }
-
-
-        this.chats = chatService.getAvailableChats();
-        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
-
-
-        chatList.setAdapter(chatsAdapter);
+//        this.chats = chatService.getAvailableChats();
+//        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
+//
+//
+//        chatList.setAdapter(chatsAdapter);
     }
 
     @Override
@@ -164,5 +175,62 @@ public class MainActivity extends AppCompatActivity
         b.putString("chatId", chat.getId());
         intent.putExtras(b);
         startActivity(intent);
+    }
+
+    public void updateChatList() {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        DatabaseReference ref = database.getReference()
+                .child("users")
+                .child(this.userService.getCurrentUserId())
+                .child("chats");
+
+        // TODO probably seperate childEventListener
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    final String chatId = ds.getKey();
+                    // TODO possible false value
+
+                    DatabaseReference chatRef = database.getReference().child("chats").child(chatId);
+                    chatRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Chat c = dataSnapshot.getValue(Chat.class);
+                            c.setId(chatId);
+                            addChat(c);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    Map<String, Chat> chatMap = new HashMap<>();
+
+    public synchronized void addChat(Chat c) {
+        chatMap.put(c.getId(), c);
+
+        List<Chat> sortedChats = new ArrayList<>(chatMap.values());
+        Collections.sort(sortedChats, new Comparator<Chat>() {
+            @Override
+            public int compare(Chat c1, Chat c2) {
+               return (int) (c1.getTimestamp() - c2.getTimestamp());
+            }
+        });
+
+        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, sortedChats, this.userService.getCurrentUserId(), this.userService);
+        chatList.setAdapter(chatsAdapter);
     }
 }

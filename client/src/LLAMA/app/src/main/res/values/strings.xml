@@ -34,6 +34,7 @@
     <string name="send">Send</string>
     <string name="message_composer_hint">Message</string>
     <string name="message_composer_send">Send</string>
+    <string name="original">Original</string>
 
     <!-- Strings related to Settings -->
 

@@ -1,5 +1,6 @@
 package org.llama.llama.chat;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,23 +13,30 @@ import com.google.firebase.database.Query;
 
 import org.llama.llama.AppConstant;
 import org.llama.llama.R;
-import org.llama.llama.models.Message;
+import org.llama.llama.model.Message;
+import org.llama.llama.services.IUserService;
 
-public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message>> {
+import java.util.List;
+
+public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IUserService>> {
     private static final String TAG = ChatAdapter.class.getSimpleName();
 
     private LayoutInflater inflater = null;
     //    private List<Message> messages;
     private FirebaseArray mSnapshots;
+    private final String userId;
+    private IUserService userService;
 
 //    public ChatAdapter(Context context, List<Message> messages) {
 //        this.messages = messages;
 //        inflater = LayoutInflater.from(context);
 //    }
 
-    public ChatAdapter(FirebaseArray snapshots) {
+    public ChatAdapter(FirebaseArray snapshots, String userId, IUserService userService) {
 //        inflater = LayoutInflater.from(context);
-        mSnapshots = snapshots;
+        this.userId = userId;
+        this.mSnapshots = snapshots;
+        this.userService = userService;
 
         mSnapshots.setOnChangedListener(new FirebaseArray.OnChangedListener() {
             @Override
@@ -58,25 +66,27 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message>> {
         });
     }
 
-    public ChatAdapter(Query ref) {
-        this(new FirebaseArray(ref));
+    public ChatAdapter(Query ref, String userId, IUserService userService) {
+        this(new FirebaseArray(ref), userId, userService);
     }
 
     @Override
-    public BaseViewHolder<Message> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<Message, IUserService> onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case AppConstant.MESSAGE_ITEM_ME:
                 return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_me, parent, false));
             case AppConstant.MESSAGE_ITEM_THEM:
-                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false));
+                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false), "de"); // TODO use prefered language
+            case AppConstant.MULTIMEDIA_ITEM:
+                return new MultimediaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.multimedia_item, parent, false));
         }
         return null;
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder<Message> holder, int position) {
+    public void onBindViewHolder(BaseViewHolder<Message, IUserService> holder, int position) {
         Message msg = getItem(position);
-        holder.setDataOnView(msg);
+        holder.setDataOnView(msg, this.userService);
     }
 
     @Override
@@ -88,10 +98,10 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message>> {
     @Override
     public int getItemViewType(int position) {
         Message msg = getItem(position);
+        if (msg != null) {
 
-        if (msg != null)
             return getMessageType(msg);
-
+        }
         return super.getItemViewType(position);
     }
 
@@ -99,10 +109,14 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message>> {
     private int getMessageType(Message msg) {
         if (msg.getViewType() == -1) {
             //TODO gets called and calculated pretty often
-            if (Math.random() < 0.5) {
-                msg.setViewType(AppConstant.MESSAGE_ITEM_ME);
+            if (!Message.TEXT.equals(msg.getType())) { // multimedia
+                msg.setViewType(AppConstant.MULTIMEDIA_ITEM);
             } else {
-                msg.setViewType(AppConstant.MESSAGE_ITEM_THEM);
+                if (msg.getUser().equals(this.userId)) {
+                    msg.setViewType(AppConstant.MESSAGE_ITEM_ME);
+                } else {
+                    msg.setViewType(AppConstant.MESSAGE_ITEM_THEM);
+                }
             }
         }
         return msg.getViewType();
