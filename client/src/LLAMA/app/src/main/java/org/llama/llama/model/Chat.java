@@ -10,7 +10,7 @@ public class Chat {
     private String lastMessage;
     private String owner;
     private Long timestamp;
-    private ChatType type;
+    private String type;
 
     public Chat() {
     }
@@ -66,11 +66,11 @@ public class Chat {
         this.timestamp = timestamp;
     }
 
-    public ChatType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ChatType type) {
+    public void setType(String type) {
         this.type = type;
     }
     //</editor-fold>
