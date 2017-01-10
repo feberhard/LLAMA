@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationServices;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final static long TIMER_PERIOD = 5000;
 
     DatabaseReference usersRef;
+    DatabaseReference myLocationRef;
 
     private GoogleMap mMap;
     private LatLng myLatLng;
@@ -89,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // setting up db
         usersRef = FirebaseDatabase.getInstance().getReference("users");
+        myLocationRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("location");
 
         // setting up the timer
         timerTask = new TimerTask() {
@@ -155,6 +158,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(myLatLng));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
 
+                // store new location in db
+                myLocationRef.child("0").setValue(myLatLng.latitude);
+                myLocationRef.child("1").setValue(myLatLng.longitude);
             }
 
             @Override
@@ -177,7 +183,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Log.d("MAP", "Users nearby:");
+
         for(DataSnapshot user : dataSnapshot.getChildren()) {
+            // skip ourselves!
+            if (user.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                continue;
+            }
 
             // check longitude
             Double longitude = user.child("location/1").getValue(Double.class);
