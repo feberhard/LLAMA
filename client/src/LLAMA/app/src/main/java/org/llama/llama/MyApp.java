@@ -2,6 +2,7 @@ package org.llama.llama;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import org.llama.llama.services.DaggerServiceComponent;
 import org.llama.llama.services.ServiceComponent;
@@ -11,7 +12,7 @@ import org.llama.llama.services.ServiceModule;
  * Created by Felix on 21.11.2016.
  */
 
-public class MyApp extends Application {
+public class MyApp extends MultiDexApplication {
     private ServiceComponent mServiceComponent;
     private static Context context;
 
