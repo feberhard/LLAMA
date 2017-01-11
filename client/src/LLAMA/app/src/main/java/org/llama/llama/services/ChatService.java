@@ -166,9 +166,6 @@ public class ChatService implements IChatService {
             }
         });
 
-
-
-
         return key;
     }
 }
