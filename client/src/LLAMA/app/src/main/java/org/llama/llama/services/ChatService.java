@@ -12,7 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 import org.llama.llama.model.Chat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Felix on 21.11.2016.
@@ -20,7 +22,6 @@ import java.util.List;
 
 public class ChatService implements IChatService {
     private static final String TAG = "ChatService";
-
 
 
     public void write() {
@@ -81,5 +82,34 @@ public class ChatService implements IChatService {
     @Override
     public void getConversation(String chatId) {
 
+    }
+
+    @Override
+    public String createChat() {
+        String ownerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference chatsReference = db.getReference().child("chats");
+        String key = chatsReference.push().getKey();
+        Long timestamp = System.currentTimeMillis();
+
+        // create chat entry
+        Chat c = new Chat();
+        c.setOwner(ownerId);
+        c.setTitle("New Group chat");
+        c.setType("group");
+        c.setTimestamp(timestamp);
+        c.setLastMessage("");
+        chatsReference.child(key).setValue(c);
+
+        // create members entry
+        Map<String, Long> chatMembers = new HashMap<>();
+        chatMembers.put(ownerId, timestamp);
+        db.getReference().child("members").child(key).setValue(chatMembers);
+
+        // create chat entry in users
+        db.getReference().child("users").child(ownerId).child("chats").child(key).setValue(true);
+
+        return key;
     }
 }

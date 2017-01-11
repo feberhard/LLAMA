@@ -38,4 +38,7 @@
 
     <string name="username">Username</string>
     <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="members">members</string>
+    <string name="joined">joined</string>
 </resources>
