@@ -68,8 +68,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView recycler = (RecyclerView) findViewById(R.id.message_list_recycler);
         recycler.setHasFixedSize(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
-//        linearLayoutManager.setStackFromEnd(true);
+//        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         recycler.setLayoutManager(linearLayoutManager);
 
         ref = db.getReference()

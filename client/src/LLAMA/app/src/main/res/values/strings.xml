@@ -41,4 +41,9 @@
 
     <string name="members">members</string>
     <string name="joined">joined</string>
+    <string name="add_member">Add Member</string>
+    <string name="update_chat_title">Update Chat Title</string>
+    <string name="chat_title">Chat Title</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_your_friends_username">Enter your friend\'s username</string>
 </resources>

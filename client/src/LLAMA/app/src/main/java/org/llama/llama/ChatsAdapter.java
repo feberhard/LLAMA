@@ -68,8 +68,10 @@ public class ChatsAdapter extends ArrayAdapter<Chat> {
         lastMessage.setText(chat.getLastMessage());
         if (chat.getType().equals("group")) { // group
             chatName.setText(chat.getTitle());
-
+            chatImage.setImageResource(R.drawable.ic_group);
         } else if (chat.getType().equals("dialog")) { // dialog
+            chatImage.setImageResource(R.drawable.ic_person);
+
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference().child("members").child(chat.getId());
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,7 +85,7 @@ public class ChatsAdapter extends ArrayAdapter<Chat> {
                             p.done(new DoneCallback() {
                                 @Override
                                 public void onDone(Object result) {
-                                    User user = (User)result;
+                                    User user = (User) result;
                                     chatName.setText(user.getName());
                                 }
                             });

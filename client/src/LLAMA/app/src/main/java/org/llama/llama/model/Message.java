@@ -1,5 +1,10 @@
 package org.llama.llama.model;
 
+import android.content.Context;
+
+import org.llama.llama.MyApp;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -91,10 +96,11 @@ public class Message {
     public String getTimeString() {
         Date date = new Date(this.timestamp);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(MyApp.getAppContext());
+//        SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
         // TODO use current timezone
 //        sdf.setTimeZone(TimeZone.getDefault());
 
-        return sdf.format(date);
+        return timeFormat.format(date);
     }
 }
