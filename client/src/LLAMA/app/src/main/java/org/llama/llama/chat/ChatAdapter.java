@@ -21,7 +21,7 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IUserService>> {
     private static final String TAG = ChatAdapter.class.getSimpleName();
 
-    private LayoutInflater inflater = null;
+    //    private LayoutInflater inflater = null;
     //    private List<Message> messages;
     private FirebaseArray mSnapshots;
     private final String userId;

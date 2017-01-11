@@ -35,4 +35,6 @@
     <string name="message_composer_hint">Message</string>
     <string name="message_composer_send">Send</string>
     <string name="original">Original</string>
+    <string name="members">members</string>
+    <string name="joined">joined</string>
 </resources>

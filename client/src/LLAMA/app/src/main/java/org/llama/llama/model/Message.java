@@ -1,6 +1,9 @@
 package org.llama.llama.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Created by Felix on 5.12.2016.
@@ -14,7 +17,7 @@ public class Message {
     private String message;
     private String user;
     private Long timestamp;
-    private Map<String,String> translations;
+    private Map<String, String> translations;
     private String type; // text or multimedia
 
     private int viewType = -1;
@@ -83,5 +86,15 @@ public class Message {
 
     public void setViewType(int viewType) {
         this.viewType = viewType;
+    }
+
+    public String getTimeString() {
+        Date date = new Date(this.timestamp);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+        // TODO use current timezone
+//        sdf.setTimeZone(TimeZone.getDefault());
+
+        return sdf.format(date);
     }
 }

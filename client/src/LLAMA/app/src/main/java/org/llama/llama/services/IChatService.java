@@ -13,4 +13,6 @@ public interface IChatService {
     List<Chat> getAvailableChats();
 
     void getConversation(String chatId);
+
+    String createChat();
 }
