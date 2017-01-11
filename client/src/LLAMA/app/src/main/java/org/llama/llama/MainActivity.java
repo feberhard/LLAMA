@@ -1,7 +1,11 @@
 package org.llama.llama;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -15,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +49,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
     @Inject
     IChatService chatService;
@@ -66,11 +72,21 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                UserDialogFragment userDialog = new UserDialogFragment();
+                userDialog.show(ft, "userdialog");
             }
         });
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,6 +96,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        ImageView profilePicture = (ImageView) header.findViewById(R.id.profilePicture);
+        profilePicture.setOnClickListener(this);
 
         chatList = (ListView) findViewById(R.id.chat_list);
         chatList.setClickable(true);
@@ -135,7 +155,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_share) {
 //            this.chatService.read();
-
+            this.chatService.createChat();
         } else if (id == R.id.nav_send) {
             this.updateChatList();
         } else if (id == R.id.nav_change_user) {
@@ -154,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
-        }else {
+        } else {
 
 
             updateChatList();
@@ -173,6 +193,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(MainActivity.this, ChatActivity.class);
         Bundle b = new Bundle();
         b.putString("chatId", chat.getId());
+        b.putString("chatTitle", chat.getTitle());
         intent.putExtras(b);
         startActivity(intent);
     }
@@ -226,11 +247,47 @@ public class MainActivity extends AppCompatActivity
         Collections.sort(sortedChats, new Comparator<Chat>() {
             @Override
             public int compare(Chat c1, Chat c2) {
-               return (int) (c1.getTimestamp() - c2.getTimestamp());
+                return (int) (c1.getTimestamp() - c2.getTimestamp());
             }
         });
 
         ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, sortedChats, this.userService.getCurrentUserId(), this.userService);
         chatList.setAdapter(chatsAdapter);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PermissionRequests.LOCATION_FINE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+        }
+    }
+
+    public void createChat(String userName) {
+        chatService.createDialogChat(userName);
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+
     }
 }

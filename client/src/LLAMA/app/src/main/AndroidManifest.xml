@@ -7,6 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -23,7 +24,7 @@
             android:resource="@drawable/ic_llama_head_notification" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
+            android:resource="@color/text_gray" />
         <!-- [END fcm_default_icon] -->
 
         <activity
@@ -52,7 +53,8 @@
         </service>
 
         <activity android:name=".auth.SignInActivity" />
-        <activity android:name=".chat.ChatActivity" />
+        <activity android:name=".chat.ChatActivity"
+            android:launchMode="singleTop" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -71,6 +73,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.llama.llama.MainActivity" />
+        </activity>
+        <activity android:name=".chat.chatinfo.ChatInfoActivity"
+            android:label="Chat Info">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.llama.llama.chat.ChatActivity"/>
         </activity>
         <activity
             android:name=".settings.SettingsActivity"

@@ -80,6 +80,6 @@ public class MessageViewHolder extends BaseViewHolder<Message, IUserService> {
             }
         });
 
-        txtTimestamp.setText(msg.getTimestamp() + "");
+        txtTimestamp.setText(msg.getTimeString());
     }
 }

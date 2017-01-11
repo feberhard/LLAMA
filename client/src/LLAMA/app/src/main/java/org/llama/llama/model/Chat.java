@@ -10,7 +10,7 @@ public class Chat {
     private String lastMessage;
     private String owner;
     private Long timestamp;
-    private String type; // TODO enum: group, dialog
+    private String type;
 
     public Chat() {
     }
