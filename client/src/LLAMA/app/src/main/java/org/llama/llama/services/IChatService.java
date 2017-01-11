@@ -17,4 +17,6 @@ public interface IChatService {
     String createChat();
 
     String createDialogChat(String partnerUsername);
+
+    void addMember(String chatId, String username);
 }

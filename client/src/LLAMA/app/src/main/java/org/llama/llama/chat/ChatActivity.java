@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private String chatId;
     private String chatTitle;
+    private boolean isGroup;
 
     private ActionBar actionBar;
 
@@ -52,14 +54,45 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         actionBar = getSupportActionBar();
 
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         Bundle b = getIntent().getExtras();
         chatId = null;
         if (b != null) {
             chatId = b.getString("chatId");
             chatTitle = b.getString("chatTitle");
+            isGroup = b.getBoolean("isGroup");
             actionBar.setTitle(chatTitle);
+        }
+
+        // load chat partner's username, if it is a dialog
+        if (!isGroup) {
+            db.getReference().child("members").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (!ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            db.getReference().child("users").child(ds.getKey()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    chatTitle = dataSnapshot.getValue(String.class);
+                                    actionBar.setTitle(chatTitle);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
         txtMessage = (EditText) findViewById(R.id.editTextNewMessage);
@@ -68,8 +101,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView recycler = (RecyclerView) findViewById(R.id.message_list_recycler);
         recycler.setHasFixedSize(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
-//        linearLayoutManager.setStackFromEnd(true);
+//        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         recycler.setLayoutManager(linearLayoutManager);
 
         ref = db.getReference()
@@ -98,18 +131,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Listen for members change (subtitle)
-        DatabaseReference usersRef = db.getReference().child("members").child(chatId);
-        usersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                actionBar.setSubtitle(String.format("%d %s", dataSnapshot.getChildrenCount(), getString(R.string.members)));
-            }
+        if (isGroup) {
+            DatabaseReference usersRef = db.getReference().child("members").child(chatId);
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    actionBar.setSubtitle(String.format("%d %s", dataSnapshot.getChildrenCount(), getString(R.string.members)));
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         // Listen for click events on ActionBar Title
         ViewTools.findActionBarTitle(getWindow().getDecorView()).setOnClickListener(new View.OnClickListener() {
@@ -119,6 +154,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Bundle b = new Bundle();
                 b.putString("chatId", chatId);
                 b.putString("chatTitle", chatTitle);
+                b.putBoolean("isGroup", isGroup);
                 intent.putExtras(b);
                 startActivity(intent);
             }

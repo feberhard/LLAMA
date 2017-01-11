@@ -76,7 +76,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
             case AppConstant.MESSAGE_ITEM_ME:
                 return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_me, parent, false));
             case AppConstant.MESSAGE_ITEM_THEM:
-                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false), "de"); // TODO use prefered language
+                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false), "en"); // TODO use prefered language
             case AppConstant.MULTIMEDIA_ITEM:
                 return new MultimediaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.multimedia_item, parent, false));
         }

@@ -7,14 +7,16 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_supervisor_account_black_24dp"
+        app:srcCompat="@drawable/ic_person"
         android:id="@+id/imgChatOverview"
-        android:adjustViewBounds="false" />
+        android:adjustViewBounds="false"
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginStart="5dp">
 
         <TextView
             android:text=""

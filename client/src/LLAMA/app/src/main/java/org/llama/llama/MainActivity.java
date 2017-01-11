@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabDialog = (FloatingActionButton) findViewById(R.id.fabDialog);
+        fabDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -86,7 +86,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
+        FloatingActionButton fabGroup = (FloatingActionButton) findViewById(R.id.fabGroup);
+        fabGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chatService.createChat();
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -155,7 +161,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_share) {
 //            this.chatService.read();
-            this.chatService.createChat();
+            //this.chatService.createChat();
         } else if (id == R.id.nav_send) {
             this.updateChatList();
         } else if (id == R.id.nav_change_user) {
@@ -175,15 +181,8 @@ public class MainActivity extends AppCompatActivity
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
         } else {
-
-
             updateChatList();
         }
-//        this.chats = chatService.getAvailableChats();
-//        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
-//
-//
-//        chatList.setAdapter(chatsAdapter);
     }
 
     @Override
@@ -194,6 +193,8 @@ public class MainActivity extends AppCompatActivity
         Bundle b = new Bundle();
         b.putString("chatId", chat.getId());
         b.putString("chatTitle", chat.getTitle());
+        b.putBoolean("isGroup", chat.getType().equals("group"));
+
         intent.putExtras(b);
         startActivity(intent);
     }

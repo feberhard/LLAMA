@@ -20,21 +20,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Chat Title"
+            android:hint="@string/chat_title"
             android:inputType="text" />
 
         <Button
             android:id="@+id/btnUpdateChatTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update Chat Title" />
+            android:text="@string/update_chat_title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Members"
+            android:text="@string/members"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <Button
+            android:id="@+id/btnAddMember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_member" />
 
         <ListView
             android:id="@+id/lvChatMembers"
