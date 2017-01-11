@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
         fab:menu_fab_size="normal"
         fab:menu_showShadow="true"
         fab:menu_shadowColor="#66000000"
@@ -63,15 +64,23 @@
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
         fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_fab_label="Create...">
+        fab:menu_fab_label="Close...">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/fabDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_gro"
+            android:src="@drawable/ic_person"
             fab:fab_size="mini"
-            fab:fab_label="Menu item 1" />
+            fab:fab_label="New dialog..." />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_group"
+            fab:fab_size="mini"
+            fab:fab_label="New group..." />
 
     </com.github.clans.fab.FloatingActionMenu>
 
