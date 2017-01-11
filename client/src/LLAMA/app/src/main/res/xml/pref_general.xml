@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
         android:defaultValue="true"
@@ -49,6 +50,13 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ListPreference
+        android:key="@string/pref_title_country"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <MultiSelectListPreference

@@ -1,6 +1,6 @@
 package org.llama.llama.services;
 
-import org.llama.llama.models.Chat;
+import org.llama.llama.model.Chat;
 
 import java.util.List;
 

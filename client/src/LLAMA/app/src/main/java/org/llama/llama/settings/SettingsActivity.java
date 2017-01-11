@@ -10,28 +10,27 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.google.common.base.Joiner;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
+import org.jdeferred.DoneCallback;
+import org.jdeferred.Promise;
 import org.llama.llama.R;
-import org.llama.llama.models.User;
-import org.llama.llama.services.IUserService;
+import org.llama.llama.model.User;
 import org.llama.llama.services.UserService;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -158,12 +157,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
-
-        UserService userService = new UserService();
-        userService.getUserInfo(userService.getCurrentUserId());
-
-        //User user = userService.getUser();
-        //String mood = user.getMood();
     }
 
     /**
@@ -217,41 +210,65 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("pref_display_name"));
-            bindPreferenceSummaryToValue(findPreference("pref_user_name"));
-            bindPreferenceSummaryToValue(findPreference("pref_mood"));
-            bindPreferenceSummaryToValue(findPreference("pref_email"));
+            UserService userService = new UserService();
+            Promise p = userService.getUserInfo(userService.getCurrentUserId());
 
-            final MultiSelectListPreference langsPreference = (MultiSelectListPreference) findPreference("pref_languages");
-            setListPreferenceData(langsPreference);
-            langsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            final EditTextPreference namePref = (EditTextPreference) findPreference("pref_display_name");
+            final Preference usernamePref = findPreference("pref_user_name");
+            final EditTextPreference moodPref = (EditTextPreference) findPreference("pref_mood");
+            final EditTextPreference emailPref = (EditTextPreference) findPreference("pref_email");
+            final MultiSelectListPreference langsPref = (MultiSelectListPreference) findPreference("pref_languages");
+            final ListPreference langPref = (ListPreference) findPreference("pref_default_language");
+
+            p.done(new DoneCallback() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    setListPreferenceData(langsPreference);
-                    return false;
+                public void onDone(Object result) {
+                    User user = (User)result;
+
+                    namePref.setText(user.getName());
+                    namePref.setSummary(user.getName());
+                    bindPreferenceSummaryToValue(namePref);
+
+                    usernamePref.setSummary(user.getUsername());
+                    bindPreferenceSummaryToValue(usernamePref);
+
+                    moodPref.setText(user.getMood());
+                    moodPref.setSummary(user.getMood());
+                    bindPreferenceSummaryToValue(moodPref);
+
+                    emailPref.setText(user.getEmail());
+                    emailPref.setSummary(user.getEmail());
+                    bindPreferenceSummaryToValue(emailPref);
+
+                    // TODO: country
+
+                    setListPreferenceData(langsPref);
+                    langsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            setListPreferenceData(langsPref);
+                            return false;
+                        }
+                    });
+                    bindPreferenceSummaryToValue(langsPref);
+
+                    // TODO: update entries/values for pref_default_language when pref_languages is changed
+                    langPref.setValue(user.getDefaultLanguage());
+                    setListPreferenceData(langPref, langsPref, PreferenceManager
+                            .getDefaultSharedPreferences(langsPref.getContext())
+                            .getStringSet(langsPref.getKey(), null));
+                    langPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            setListPreferenceData(langPref, langsPref, PreferenceManager
+                                    .getDefaultSharedPreferences(langsPref.getContext())
+                                    .getStringSet(langsPref.getKey(), null));
+                            return false;
+                        }
+                    });
+                    bindPreferenceSummaryToValue(langPref);
                 }
             });
-            bindPreferenceSummaryToValue(langsPreference);
-
-            // TODO: update entries/values for pref_default_language when pref_languages is changed
-            final ListPreference langPreference = (ListPreference) findPreference("pref_default_language");
-            setListPreferenceData(langPreference, langsPreference, PreferenceManager
-                    .getDefaultSharedPreferences(langsPreference.getContext())
-                    .getStringSet(langsPreference.getKey(), null));
-            langPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    setListPreferenceData(langPreference, langsPreference, PreferenceManager
-                            .getDefaultSharedPreferences(langsPreference.getContext())
-                            .getStringSet(langsPreference.getKey(), null));
-                    return false;
-                }
-            });
-            bindPreferenceSummaryToValue(langPreference);
         }
 
         protected static void setListPreferenceData(ListPreference lp, MultiSelectListPreference langsp, Set<String> values) {

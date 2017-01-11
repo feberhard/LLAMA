@@ -1,6 +1,10 @@
 package org.llama.llama.chat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,10 +12,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -23,6 +30,8 @@ import org.llama.llama.chat.chatinfo.ChatInfoActivity;
 import org.llama.llama.services.IChatService;
 import org.llama.llama.services.IUserService;
 import org.llama.llama.utils.ViewTools;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -114,7 +123,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mAdapter = new ChatAdapter(query, this.userService.getCurrentUserId(), this.userService);
         recycler.setAdapter(mAdapter);
 
-
         // Listen for title change events
         DatabaseReference titleRef = db.getReference().child("chats").child(chatId).child("title");
         titleRef.addValueEventListener(new ValueEventListener() {
@@ -159,6 +167,41 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
         });
+
+//        ImageView imageView = (ImageView) findViewById(R.id.imgFlag);
+//        loadFlag(imageView, "sq");
+    }
+
+    public boolean loadFlag(ImageView imageView, String langId) {
+        // read a flag from the assets folder
+        SVG svg = null;
+        try {
+            svg = SVG.getFromAsset(getApplicationContext().getAssets(), "flags/" + langId + ".svg");
+        } catch (SVGParseException | IOException e) {
+            return false;
+        }
+
+        // create a canvas to draw onto
+        if (svg.getDocumentWidth() != -1) {
+            Bitmap bitmap = Bitmap.createBitmap((int) Math.ceil(svg.getDocumentWidth()),
+                    (int) Math.ceil(svg.getDocumentHeight()),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+
+            // clear background to white
+            canvas.drawRGB(255, 255, 255);
+
+            // render the flag onto our canvas
+            svg.renderToCanvas(canvas);
+
+            // draw flag on imageView
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Color.BLACK);
+            canvas.drawCircle(50, 50, 10, paint);
+            imageView.setImageBitmap(bitmap);
+        }
+
+        return true;
     }
 
     private void sendMessage() {

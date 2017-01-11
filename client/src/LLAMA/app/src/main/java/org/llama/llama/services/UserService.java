@@ -7,7 +7,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.llama.llama.models.User;
+import org.jdeferred.Deferred;
+import org.jdeferred.Promise;
+import org.jdeferred.impl.DeferredObject;
+import org.llama.llama.MyApp;
+import org.llama.llama.model.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Felix on 21.11.2016.
@@ -15,6 +22,17 @@ import org.llama.llama.models.User;
 
 public class UserService implements IUserService {
     private static final String TAG = "UserService";
+    private static Map<String, User> userCache = new HashMap<>();
+    private static Map<String, Promise> userRequestCache = new HashMap<>();
+    private static final String cacheFile = "UserServiceCache.bin";
+
+
+    public UserService() {
+        Map<String, User> userCache = StorageService.readFromFile(MyApp.getAppContext(), cacheFile);
+        if (userCache != null) {
+            UserService.userCache = userCache;
+        }
+    }
 
     @Override
     public String getCurrentUserId() {
@@ -22,21 +40,47 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void getUserInfo(String userId) {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public synchronized Promise getUserInfo(final String userId) {
+        if(userRequestCache.containsKey(userId)){
+            return userRequestCache.get(userId);
+        }
 
-        DatabaseReference ref = database.getReference().child("users").child(userId);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-            }
+        final Deferred deferred = new DeferredObject();
+        final Promise promise = deferred.promise();
+        userRequestCache.put(userId, promise);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        User user = userCache.get(userId);
+        if (user == null) {
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-            }
-        });
+            DatabaseReference ref = database.getReference().child("users").child(userId);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+//                    userCache.put(userId, user);
+                    updateUserCache(user);
+                    deferred.resolve(user);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    userRequestCache.remove(userId);
+                    deferred.reject(null);
+                }
+            });
+        }else{
+            deferred.resolve(user);
+        }
+
+        return promise;
+    }
+
+
+    public synchronized void updateUserCache(User user) {
+        userCache.put(user.getId(), user);
+        // TODO probably make async call to storageService
+        StorageService.writeToFile(MyApp.getAppContext(), cacheFile, userCache);
     }
 
     @Override

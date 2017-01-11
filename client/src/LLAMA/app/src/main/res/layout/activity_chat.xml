@@ -28,11 +28,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
 
-        <ImageView
-            android:id="@+id/imgFlag"
-            android:layout_width="100dp"
-            android:layout_height="50dp" />
-
         <EditText
             android:id="@+id/editTextNewMessage"
             android:layout_width="0dp"
