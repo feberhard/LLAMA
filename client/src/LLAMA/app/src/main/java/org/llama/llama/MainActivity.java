@@ -185,6 +185,8 @@ public class MainActivity extends AppCompatActivity
         Bundle b = new Bundle();
         b.putString("chatId", chat.getId());
         b.putString("chatTitle", chat.getTitle());
+        b.putBoolean("isGroup", chat.getType().equals("group"));
+
         intent.putExtras(b);
         startActivity(intent);
     }
