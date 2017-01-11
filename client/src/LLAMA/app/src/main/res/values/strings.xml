@@ -35,4 +35,7 @@
     <string name="message_composer_hint">Message</string>
     <string name="message_composer_send">Send</string>
     <string name="original">Original</string>
+
+    <string name="username">Username</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

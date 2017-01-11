@@ -24,7 +24,7 @@
             android:resource="@drawable/ic_llama_head_notification" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
+            android:resource="@color/text_gray" />
         <!-- [END fcm_default_icon] -->
 
         <activity
