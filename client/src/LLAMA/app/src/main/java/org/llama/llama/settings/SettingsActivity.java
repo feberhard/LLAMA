@@ -31,7 +31,12 @@ import org.llama.llama.model.User;
 import org.llama.llama.services.UserService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -170,6 +175,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -217,6 +232,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final Preference usernamePref = findPreference("pref_user_name");
             final EditTextPreference moodPref = (EditTextPreference) findPreference("pref_mood");
             final EditTextPreference emailPref = (EditTextPreference) findPreference("pref_email");
+            final ListPreference countryPref = (ListPreference) findPreference("pref_country");
             final MultiSelectListPreference langsPref = (MultiSelectListPreference) findPreference("pref_languages");
             final ListPreference langPref = (ListPreference) findPreference("pref_default_language");
 
@@ -230,7 +246,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     bindPreferenceSummaryToValue(namePref);
 
                     usernamePref.setSummary(user.getUsername());
-                    bindPreferenceSummaryToValue(usernamePref);
+                    //bindPreferenceSummaryToValue(usernamePref);
 
                     moodPref.setText(user.getMood());
                     moodPref.setSummary(user.getMood());
@@ -240,7 +256,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     emailPref.setSummary(user.getEmail());
                     bindPreferenceSummaryToValue(emailPref);
 
-                    // TODO: country
+                    Map<String, String> countryData = new HashMap<>();
+                    countryData.put("Österreich", "AT");
+                    countryData.put("Italia", "IT");
+
+                    countryPref.setValue(user.getCountry());
+                    setListPreferenceData(countryPref, countryData);
+                    bindPreferenceSummaryToValue(countryPref);
 
                     setListPreferenceData(langsPref);
                     langsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -271,6 +293,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
         }
 
+        protected static void setListPreferenceData(ListPreference lp, Map<String, String> values) {
+            lp.setEntries(values.keySet().toArray(new CharSequence[values.size()]));
+            lp.setEntryValues(values.values().toArray(new CharSequence[values.size()]));
+            lp.setDefaultValue("AT");
+        }
+
         protected static void setListPreferenceData(ListPreference lp, MultiSelectListPreference langsp, Set<String> values) {
             List<String> entries = new ArrayList<>();
             CharSequence[] entryValues = values.toArray(new CharSequence[entries.size()]);
@@ -282,16 +310,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
 
             lp.setEntries(entries.toArray(new CharSequence[entries.size()]));
-            lp.setDefaultValue(entryValues[0]);
             lp.setEntryValues(entryValues);
+            lp.setDefaultValue(entryValues[0]);
         }
 
         protected static void setListPreferenceData(MultiSelectListPreference lp) {
             CharSequence[] entries = {"Llama", "English", "French", "German", "Italiano", "Español", "العربية", "Русский", "Dutch", "Portuguese", "中文(简体)", "中文（繁體）"};
             CharSequence[] entryValues = {"ll", "en", "fr", "de", "it", "es", "ar", "ru", "nl", "pt", "zh-CN", "zh-TW"};
             lp.setEntries(entries);
-            lp.setDefaultValue("en");
             lp.setEntryValues(entryValues);
+            lp.setDefaultValue("en");
         }
 
         @Override
