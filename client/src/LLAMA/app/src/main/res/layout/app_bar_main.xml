@@ -70,7 +70,7 @@
             android:id="@+id/fabDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_person"
+            android:src="@drawable/ic_person_white"
             fab:fab_size="mini"
             fab:fab_label="New dialog..." />
 
@@ -78,7 +78,7 @@
             android:id="@+id/fabGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_group"
+            android:src="@drawable/ic_group_white"
             fab:fab_size="mini"
             fab:fab_label="New group..." />
 
