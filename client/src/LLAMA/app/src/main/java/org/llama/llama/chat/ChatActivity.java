@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,7 +53,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         actionBar = getSupportActionBar();
 
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         Bundle b = getIntent().getExtras();
         chatId = null;
@@ -61,6 +62,34 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             chatTitle = b.getString("chatTitle");
             actionBar.setTitle(chatTitle);
         }
+
+        // load chat partner's username, if it is a dialog
+        db.getReference().child("members").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (!ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        db.getReference().child("users").child(ds.getKey()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                chatTitle = dataSnapshot.getValue(String.class);
+                                actionBar.setTitle(chatTitle);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         txtMessage = (EditText) findViewById(R.id.editTextNewMessage);
         findViewById(R.id.btn_send_message).setOnClickListener(this);
@@ -127,7 +156,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void sendMessage() {
         // TODO get message language from chat layout
-        String messageLanguage = "de";
+        String messageLanguage = "en";
         String msg = txtMessage.getText().toString();
         String userId = this.userService.getCurrentUserId();
         String chatId = this.chatId;
