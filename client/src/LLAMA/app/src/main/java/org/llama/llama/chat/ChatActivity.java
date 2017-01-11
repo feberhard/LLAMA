@@ -41,6 +41,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private String chatId;
     private String chatTitle;
+    private boolean isGroup;
 
     private ActionBar actionBar;
 
@@ -60,36 +61,39 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         if (b != null) {
             chatId = b.getString("chatId");
             chatTitle = b.getString("chatTitle");
+            isGroup = b.getBoolean("isGroup");
             actionBar.setTitle(chatTitle);
         }
 
         // load chat partner's username, if it is a dialog
-        db.getReference().child("members").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (!ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        db.getReference().child("users").child(ds.getKey()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                chatTitle = dataSnapshot.getValue(String.class);
-                                actionBar.setTitle(chatTitle);
-                            }
+        if (!isGroup) {
+            db.getReference().child("members").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (!ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            db.getReference().child("users").child(ds.getKey()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    chatTitle = dataSnapshot.getValue(String.class);
+                                    actionBar.setTitle(chatTitle);
+                                }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         txtMessage = (EditText) findViewById(R.id.editTextNewMessage);
         findViewById(R.id.btn_send_message).setOnClickListener(this);
@@ -127,18 +131,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Listen for members change (subtitle)
-        DatabaseReference usersRef = db.getReference().child("members").child(chatId);
-        usersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                actionBar.setSubtitle(String.format("%d %s", dataSnapshot.getChildrenCount(), getString(R.string.members)));
-            }
+        if (isGroup) {
+            DatabaseReference usersRef = db.getReference().child("members").child(chatId);
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    actionBar.setSubtitle(String.format("%d %s", dataSnapshot.getChildrenCount(), getString(R.string.members)));
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         // Listen for click events on ActionBar Title
         ViewTools.findActionBarTitle(getWindow().getDecorView()).setOnClickListener(new View.OnClickListener() {
@@ -148,6 +154,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Bundle b = new Bundle();
                 b.putString("chatId", chatId);
                 b.putString("chatTitle", chatTitle);
+                b.putBoolean("isGroup", isGroup);
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -156,7 +163,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void sendMessage() {
         // TODO get message language from chat layout
-        String messageLanguage = "en";
+        String messageLanguage = "de";
         String msg = txtMessage.getText().toString();
         String userId = this.userService.getCurrentUserId();
         String chatId = this.chatId;
