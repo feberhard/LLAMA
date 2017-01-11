@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_share) {
 //            this.chatService.read();
-            this.chatService.createChat();
+            //this.chatService.createChat();
         } else if (id == R.id.nav_send) {
             this.updateChatList();
         } else if (id == R.id.nav_change_user) {
@@ -173,15 +173,8 @@ public class MainActivity extends AppCompatActivity
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
         } else {
-
-
             updateChatList();
         }
-//        this.chats = chatService.getAvailableChats();
-//        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, this.chats);
-//
-//
-//        chatList.setAdapter(chatsAdapter);
     }
 
     @Override

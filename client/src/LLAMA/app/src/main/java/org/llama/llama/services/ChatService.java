@@ -168,4 +168,39 @@ public class ChatService implements IChatService {
 
         return key;
     }
+
+    @Override
+    public void addMember(final String chatId, String username) {
+        final FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+        // create references
+        final DatabaseReference usersRef= db.getReference().child("users");
+        final DatabaseReference membersRef = db.getReference().child("members");
+
+        final Long timestamp = System.currentTimeMillis();
+
+        // get partner's id
+        Query query = usersRef.orderByChild("username").startAt(username).endAt(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() != 1) {
+                    Log.d("CHAT", "User not found!");
+                    return;
+                }
+
+                String partnerId = dataSnapshot.getChildren().iterator().next().getKey();
+
+                membersRef.child(chatId).child(partnerId).setValue(timestamp);
+
+                // create chat entry in users
+                usersRef.child(partnerId).child("chats").child(chatId).setValue(true);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

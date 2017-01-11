@@ -1,5 +1,7 @@
 package org.llama.llama.chat.chatinfo;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
@@ -23,6 +25,7 @@ import org.jdeferred.DoneCallback;
 import org.llama.llama.MyApp;
 import org.llama.llama.R;
 import org.llama.llama.model.User;
+import org.llama.llama.services.IChatService;
 import org.llama.llama.services.IUserService;
 
 import java.text.DateFormat;
@@ -34,10 +37,13 @@ import javax.inject.Inject;
 public class ChatInfoActivity extends AppCompatActivity implements View.OnClickListener {
     private String chatId;
     private String chatTitle;
+    private boolean isGroup;
     private ActionBar actionBar;
 
     @Inject
     IUserService userService;
+    @Inject
+    IChatService chatService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,8 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
         if (b != null) {
             chatId = b.getString("chatId");
             chatTitle = b.getString("chatTitle");
+            isGroup = b.getBoolean("isGroup");
+
             actionBar.setTitle(chatTitle);
         }
 
@@ -116,12 +124,15 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
         ListView chatMembers = (ListView) findViewById(R.id.lvChatMembers);
         chatMembers.setAdapter(adapter);
 
-        EditText editTextChatTitle = (EditText)findViewById(R.id.txtChatTitle);
-
+        EditText editTextChatTitle = (EditText) findViewById(R.id.txtChatTitle);
         editTextChatTitle.setText(chatTitle);
 
-
         findViewById(R.id.btnUpdateChatTitle).setOnClickListener(this);
+        if (isGroup) {
+            findViewById(R.id.btnAddMember).setOnClickListener(this);
+        } else {
+            findViewById(R.id.btnAddMember).setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -139,7 +150,7 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.btnUpdateChatTitle) {
-            String chatTitle = ((EditText)findViewById(R.id.txtChatTitle)).getText().toString();
+            String chatTitle = ((EditText) findViewById(R.id.txtChatTitle)).getText().toString();
             FirebaseDatabase
                     .getInstance()
                     .getReference()
@@ -148,6 +159,19 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
                     .child("title")
                     .setValue(chatTitle);
             actionBar.setTitle(chatTitle);
+        } else if (i == R.id.btnAddMember) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+            AddMemberDialogFragment amdf = new AddMemberDialogFragment();
+            amdf.show(ft, "userdialog");
         }
+    }
+
+    public void addMember(String username) {
+        chatService.addMember(chatId, username);
     }
 }
