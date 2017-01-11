@@ -195,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(longitude.compareTo(myLatLng.longitude-COORDINATES_OFFSET) < 1 || longitude.compareTo(myLatLng.longitude+COORDINATES_OFFSET) > 1)
                 continue;
 
-            Log.d("MAP", user.child("username").getValue(String.class));
+            Log.d("MAP", user.child("username").getValue(String.class) != null ? user.child("username").getValue(String.class) : "anonymous");
 
             Double latitude = user.child("location/0").getValue(Double.class);
             String username = user.child("username").getValue(String.class);

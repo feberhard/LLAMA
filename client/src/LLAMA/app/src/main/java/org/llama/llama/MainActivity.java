@@ -275,9 +275,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void createChat(String username) {
-        // todo create chat with username
-        int i = 0;
+    public void createChat(String userName) {
+        chatService.createDialogChat(userName);
     }
 
     /**
