@@ -41,7 +41,7 @@ public class UserService implements IUserService {
 
     @Override
     public synchronized Promise getUserInfo(final String userId) {
-        if(userRequestCache.containsKey(userId)){
+        if (userRequestCache.containsKey(userId)) {
             return userRequestCache.get(userId);
         }
 
@@ -69,7 +69,7 @@ public class UserService implements IUserService {
                     deferred.reject(null);
                 }
             });
-        }else{
+        } else {
             deferred.resolve(user);
         }
 

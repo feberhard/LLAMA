@@ -27,7 +27,11 @@ import com.google.common.base.Joiner;
 import org.jdeferred.DoneCallback;
 import org.jdeferred.Promise;
 import org.llama.llama.R;
+import org.llama.llama.model.Country;
+import org.llama.llama.model.Language;
 import org.llama.llama.model.User;
+import org.llama.llama.services.CountryService;
+import org.llama.llama.services.LanguageService;
 import org.llama.llama.services.UserService;
 
 import java.util.ArrayList;
@@ -226,7 +230,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
 
             UserService userService = new UserService();
-            Promise p = userService.getUserInfo(userService.getCurrentUserId());
+            Promise pu = userService.getUserInfo(userService.getCurrentUserId());
+            LanguageService langService = new LanguageService();
+            final Promise pl = langService.getLanguages();
+            CountryService countryService = new CountryService();
+            final Promise pc = countryService.getCountries();
 
             final EditTextPreference namePref = (EditTextPreference) findPreference("pref_display_name");
             final Preference usernamePref = findPreference("pref_user_name");
@@ -236,10 +244,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final MultiSelectListPreference langsPref = (MultiSelectListPreference) findPreference("pref_languages");
             final ListPreference langPref = (ListPreference) findPreference("pref_default_language");
 
-            p.done(new DoneCallback() {
+            pu.done(new DoneCallback() {
                 @Override
                 public void onDone(Object result) {
-                    User user = (User)result;
+                    final User user = (User) result;
 
                     namePref.setText(user.getName());
                     namePref.setSummary(user.getName());
@@ -256,23 +264,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     emailPref.setSummary(user.getEmail());
                     bindPreferenceSummaryToValue(emailPref);
 
-                    Map<String, String> countryData = new HashMap<>();
-                    countryData.put("Österreich", "AT");
-                    countryData.put("Italia", "IT");
-
-                    countryPref.setValue(user.getCountry());
-                    setListPreferenceData(countryPref, countryData);
-                    bindPreferenceSummaryToValue(countryPref);
-
-                    setListPreferenceData(langsPref);
-                    langsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    setListPreferenceData(countryPref, pc);
+                    countryPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            setListPreferenceData(langsPref);
+                            setListPreferenceData(countryPref, pc);
                             return false;
                         }
                     });
-                    bindPreferenceSummaryToValue(langsPref);
+
+                    setListPreferenceData(langsPref, pl);
+                    langsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            setListPreferenceData(langsPref, pl);
+                            return false;
+                        }
+                    });
 
                     // TODO: update entries/values for pref_default_language when pref_languages is changed
                     langPref.setValue(user.getDefaultLanguage());
@@ -293,10 +301,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
         }
 
-        protected static void setListPreferenceData(ListPreference lp, Map<String, String> values) {
-            lp.setEntries(values.keySet().toArray(new CharSequence[values.size()]));
-            lp.setEntryValues(values.values().toArray(new CharSequence[values.size()]));
-            lp.setDefaultValue("AT");
+        protected static void setListPreferenceData(final ListPreference lp, Promise p) {
+            p.done(new DoneCallback() {
+                @Override
+                public void onDone(Object result) {
+                    Map<String, Country> countries = (Map<String, Country>) result;
+
+                    List<String> entries = new ArrayList<>();
+                    for (Country c : countries.values()) {
+                        if (c.getNativeName().equals(c.getName())) {
+                            entries.add(c.getNativeName());
+                        } else {
+                            entries.add(c.getNativeName() + " (" + c.getName() + ")");
+                        }
+                    }
+
+                    lp.setEntries(entries.toArray(new CharSequence[entries.size()]));
+                    lp.setEntryValues(countries.keySet().toArray(new CharSequence[entries.size()]));
+                    lp.setDefaultValue("AT");
+                    bindPreferenceSummaryToValue(lp);
+                }
+            });
         }
 
         protected static void setListPreferenceData(ListPreference lp, MultiSelectListPreference langsp, Set<String> values) {
@@ -314,12 +339,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             lp.setDefaultValue(entryValues[0]);
         }
 
-        protected static void setListPreferenceData(MultiSelectListPreference lp) {
-            CharSequence[] entries = {"Llama", "English", "French", "German", "Italiano", "Español", "العربية", "Русский", "Dutch", "Portuguese", "中文(简体)", "中文（繁體）"};
-            CharSequence[] entryValues = {"ll", "en", "fr", "de", "it", "es", "ar", "ru", "nl", "pt", "zh-CN", "zh-TW"};
-            lp.setEntries(entries);
-            lp.setEntryValues(entryValues);
-            lp.setDefaultValue("en");
+        protected static void setListPreferenceData(final MultiSelectListPreference lp, Promise p) {
+            p.done(new DoneCallback() {
+                @Override
+                public void onDone(Object result) {
+                    Map<String, Language> langs = (Map<String, Language>) result;
+
+                    List<String> entries = new ArrayList<>();
+                    for (Language l : langs.values()) {
+                        if (l.getNativeName().equals(l.getName())) {
+                            entries.add(l.getNativeName());
+                        } else {
+                            entries.add(l.getNativeName() + " (" + l.getName() + ")");
+                        }
+                    }
+
+                    lp.setEntries(entries.toArray(new CharSequence[entries.size()]));
+                    lp.setEntryValues(langs.keySet().toArray(new CharSequence[entries.size()]));
+                    lp.setDefaultValue("en");
+                    bindPreferenceSummaryToValue(lp);
+                }
+            });
         }
 
         @Override
