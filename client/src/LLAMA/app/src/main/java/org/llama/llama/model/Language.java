@@ -1,5 +1,9 @@
 package org.llama.llama.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Created by Daniel on 12.01.2016.
  */
@@ -8,6 +12,7 @@ public class Language implements Comparable<Language> {
     private String id;
     private String name;
     private String nativeName;
+    private Map<String, Object> targetLanguagesYandex = new HashMap<>();
 
     public Language() {
     }
@@ -40,6 +45,14 @@ public class Language implements Comparable<Language> {
 
     public void setNativeName(String nativeName) {
         this.nativeName = nativeName;
+    }
+
+    public Map<String, Object> getTargetLanguagesYandex() {
+        return targetLanguagesYandex;
+    }
+
+    public void setTargetLanguagesYandex(Map<String, Object> targetLanguagesYandex) {
+        this.targetLanguagesYandex = targetLanguagesYandex;
     }
 
     @Override

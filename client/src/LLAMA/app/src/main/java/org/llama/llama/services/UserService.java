@@ -1,20 +1,26 @@
 package org.llama.llama.services;
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jdeferred.Deferred;
 import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
 import org.llama.llama.MyApp;
+import org.llama.llama.model.Country;
 import org.llama.llama.model.User;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Felix on 21.11.2016.
@@ -58,6 +64,7 @@ public class UserService implements IUserService {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
+                    user.setId(userId);
 //                    userCache.put(userId, user);
                     updateUserCache(user);
                     deferred.resolve(user);
@@ -110,4 +117,61 @@ public class UserService implements IUserService {
 //                    }
 //                });
 //    }
+
+    private <T> String  updateUserProperty(String property, T value) {
+        String userId = getCurrentUserId();
+        FirebaseDatabase.getInstance().getReference()
+                .child("users")
+                .child(userId)
+                .child(property)
+                .setValue(value);
+        return userId;
+    }
+
+    @Override
+    public void updateCurrentUserDisplayName(String displayName) {
+        User user = userCache.get(updateUserProperty("displayname", displayName));
+        if (user != null)
+            user.setName(displayName);
+    }
+
+    @Override
+    public void updateCurrentUserMood(String mood) {
+        User user = userCache.get(updateUserProperty("mood", mood));
+        if (user != null)
+            user.setMood(mood);
+    }
+
+    @Override
+    public void updateCurrentUserEmail(String email) {
+        User user = userCache.get(updateUserProperty("email", email));
+        if (user != null)
+            user.setEmail(email);
+    }
+
+    @Override
+    public void updateCurrentUserCountry(String countryId) {
+        User user = userCache.get(updateUserProperty("country", countryId));
+        if (user != null)
+            user.setCountry(countryId);
+    }
+
+    @Override
+    public void updateCurrentUserDefaultLanguage(String defaultLanguageId) {
+        User user = userCache.get(updateUserProperty("defaultLanguage", defaultLanguageId));
+        if (user != null)
+            user.setDefaultLanguage(defaultLanguageId);
+    }
+
+    @Override
+    public void updateCurrentUserLanguages(final Set<String> languages) {
+        Map<String, Object> langs = new HashMap<>();
+        for (String lang : languages) {
+            langs.put(lang, true);
+        }
+
+        User user = userCache.get(updateUserProperty("languages", langs));
+        if (user != null)
+            user.setLanguages(langs);
+    }
 }

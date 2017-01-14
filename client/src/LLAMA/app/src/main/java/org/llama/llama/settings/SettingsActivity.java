@@ -31,14 +31,13 @@ import org.llama.llama.model.Country;
 import org.llama.llama.model.Language;
 import org.llama.llama.model.User;
 import org.llama.llama.services.CountryService;
+import org.llama.llama.services.ICountryService;
+import org.llama.llama.services.ILanguageService;
+import org.llama.llama.services.IUserService;
 import org.llama.llama.services.LanguageService;
 import org.llama.llama.services.UserService;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,9 +62,78 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * to reflect its new value.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+        private ListPreference langPref;
+
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+
+            IUserService userService = new UserService();
+
+            switch (preference.getKey()) {
+                case "pref_display_name":
+                    if (!((EditTextPreference) preference).getText().equals(stringValue)) {
+                        userService.updateCurrentUserDisplayName(stringValue);
+                    }
+                    break;
+                case "pref_mood":
+                    if (!((EditTextPreference) preference).getText().equals(stringValue)) {
+                        userService.updateCurrentUserMood(stringValue);
+                    }
+                    break;
+                case "pref_email":
+                    if (!((EditTextPreference) preference).getText().equals(stringValue)) {
+                        userService.updateCurrentUserEmail(stringValue);
+                    }
+                    break;
+                case "pref_country":
+                    if (!((ListPreference) preference).getValue().equals(stringValue)) {
+                        userService.updateCurrentUserCountry(stringValue);
+                    }
+                    break;
+                case "pref_default_language":
+                    langPref = (ListPreference) preference;
+                    if (!(langPref.getValue().equals(stringValue))) {
+                        userService.updateCurrentUserDefaultLanguage(stringValue);
+                    }
+                    break;
+                case "pref_languages":
+                    Set<String> values = (Set<String>) value;
+                    MultiSelectListPreference pref = (MultiSelectListPreference) preference;
+
+                    // there needs to be at least one language
+                    if (values.isEmpty()) {
+                        values.add("ll");
+                    }
+
+                    if (!(pref.getValues().equals(values))) {
+                        userService.updateCurrentUserLanguages(values);
+
+                        // update pref_default_language
+                        if (langPref != null) {
+                            List<String> entries = new ArrayList<>();
+                            CharSequence[] entryValues = values.toArray(new CharSequence[entries.size()]);
+
+                            CharSequence[] allEntries = pref.getEntries();
+
+                            for (String v : values) {
+                                entries.add((String) allEntries[pref.findIndexOfValue(v)]);
+                            }
+
+                            langPref.setEntries(entries.toArray(new CharSequence[entries.size()]));
+                            langPref.setEntryValues(entryValues);
+                            langPref.setDefaultValue(entryValues[0]);
+
+                            // update default language if it's not in available languages any more
+                            if (!values.contains(langPref.getValue())) {
+                                langPref.setValue(values.iterator().next());
+                            }
+
+                            bindPreferenceSummaryToValue(langPref);
+                        }
+                    }
+                    break;
+            }
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
@@ -96,7 +164,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 if (TextUtils.isEmpty(stringValue)) {
                     // Empty values correspond to 'silent' (no ringtone).
                     preference.setSummary(R.string.pref_ringtone_silent);
-
                 } else {
                     Ringtone ringtone = RingtoneManager.getRingtone(
                             preference.getContext(), Uri.parse(stringValue));
@@ -229,11 +296,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
-            UserService userService = new UserService();
+            IUserService userService = new UserService();
             Promise pu = userService.getUserInfo(userService.getCurrentUserId());
-            LanguageService langService = new LanguageService();
+            ILanguageService langService = new LanguageService();
             final Promise pl = langService.getLanguages();
-            CountryService countryService = new CountryService();
+            ICountryService countryService = new CountryService();
             final Promise pc = countryService.getCountries();
 
             final EditTextPreference namePref = (EditTextPreference) findPreference("pref_display_name");
@@ -264,6 +331,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     emailPref.setSummary(user.getEmail());
                     bindPreferenceSummaryToValue(emailPref);
 
+                    countryPref.setValue(user.getCountry());
                     setListPreferenceData(countryPref, pc);
                     countryPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
@@ -273,20 +341,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         }
                     });
 
-                    setListPreferenceData(langsPref, pl);
+                    langsPref.setValues(user.getLanguages().keySet());
+                    setListPreferenceData(langPref, langsPref, pl);
                     langsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            setListPreferenceData(langsPref, pl);
+                            setListPreferenceData(langPref, langsPref, pl);
                             return false;
                         }
                     });
 
                     // TODO: update entries/values for pref_default_language when pref_languages is changed
                     langPref.setValue(user.getDefaultLanguage());
-                    setListPreferenceData(langPref, langsPref, PreferenceManager
-                            .getDefaultSharedPreferences(langsPref.getContext())
-                            .getStringSet(langsPref.getKey(), null));
                     langPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
@@ -296,7 +362,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             return false;
                         }
                     });
-                    bindPreferenceSummaryToValue(langPref);
                 }
             });
         }
@@ -324,7 +389,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
         }
 
-        protected static void setListPreferenceData(ListPreference lp, MultiSelectListPreference langsp, Set<String> values) {
+        public static void setListPreferenceData(ListPreference lp, MultiSelectListPreference langsp, Set<String> values) {
             List<String> entries = new ArrayList<>();
             CharSequence[] entryValues = values.toArray(new CharSequence[entries.size()]);
 
@@ -337,9 +402,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             lp.setEntries(entries.toArray(new CharSequence[entries.size()]));
             lp.setEntryValues(entryValues);
             lp.setDefaultValue(entryValues[0]);
+            bindPreferenceSummaryToValue(lp);
         }
 
-        protected static void setListPreferenceData(final MultiSelectListPreference lp, Promise p) {
+        protected static void setListPreferenceData(final ListPreference lp, final MultiSelectListPreference langsp, Promise p) {
             p.done(new DoneCallback() {
                 @Override
                 public void onDone(Object result) {
@@ -354,10 +420,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         }
                     }
 
-                    lp.setEntries(entries.toArray(new CharSequence[entries.size()]));
-                    lp.setEntryValues(langs.keySet().toArray(new CharSequence[entries.size()]));
-                    lp.setDefaultValue("en");
-                    bindPreferenceSummaryToValue(lp);
+                    langsp.setEntries(entries.toArray(new CharSequence[entries.size()]));
+                    langsp.setEntryValues(langs.keySet().toArray(new CharSequence[entries.size()]));
+                    langsp.setDefaultValue("en");
+                    bindPreferenceSummaryToValue(langsp);
+
+                    setListPreferenceData(lp, langsp, langsp.getValues());
                 }
             });
         }

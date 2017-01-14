@@ -123,7 +123,7 @@ public class ChatService implements IChatService {
 
         // create references
         final DatabaseReference chatsReference = db.getReference().child("chats");
-        final DatabaseReference usersRef= db.getReference().child("users");
+        final DatabaseReference usersRef = db.getReference().child("users");
         final DatabaseReference membersRef = db.getReference().child("members");
 
         final String key = chatsReference.push().getKey();
@@ -134,7 +134,7 @@ public class ChatService implements IChatService {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildrenCount() != 1) {
+                if (dataSnapshot.getChildrenCount() != 1) {
                     Log.d("CHAT", "User not found!");
                     return;
                 }
@@ -173,7 +173,7 @@ public class ChatService implements IChatService {
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         // create references
-        final DatabaseReference usersRef= db.getReference().child("users");
+        final DatabaseReference usersRef = db.getReference().child("users");
         final DatabaseReference membersRef = db.getReference().child("members");
 
         final Long timestamp = System.currentTimeMillis();
@@ -183,7 +183,7 @@ public class ChatService implements IChatService {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildrenCount() != 1) {
+                if (dataSnapshot.getChildrenCount() != 1) {
                     Log.d("CHAT", "User not found!");
                     return;
                 }
