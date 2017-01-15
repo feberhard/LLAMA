@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.caverock.androidsvg.SVG;
@@ -18,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jdeferred.Deferred;
 import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
+import org.llama.llama.MyApp;
 import org.llama.llama.model.Language;
 
 import java.io.IOException;
@@ -99,13 +101,13 @@ public class LanguageService implements ILanguageService {
     }
 
     @Override
-    public boolean loadFlag(Activity activity, int imageViewId, String langId) {
-        ImageView imageView = (ImageView) activity.findViewById(imageViewId);
+    public boolean loadFlag(View view, int imageViewId, String langId) {
+        ImageView imageView = (ImageView) view.findViewById(imageViewId);
 
         // read a flag from the assets folder
         SVG svg = null;
         try {
-            svg = SVG.getFromAsset(activity.getApplicationContext().getAssets(), "flags/" + langId + ".svg");
+            svg = SVG.getFromAsset(MyApp.getAppContext().getAssets(), "flags/" + langId + ".svg");
         } catch (SVGParseException | IOException e) {
             return false;
         }

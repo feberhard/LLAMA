@@ -1,6 +1,7 @@
 package org.llama.llama.services;
 
 import android.app.Activity;
+import android.view.View;
 
 import org.jdeferred.Promise;
 
@@ -10,5 +11,5 @@ import org.jdeferred.Promise;
 public interface ILanguageService {
     Promise getLanguages();
     Promise getLanguage(String langId);
-    boolean loadFlag(Activity activity, int imageViewId, String langId);
+    boolean loadFlag(View view, int imageViewId, String langId);
 }

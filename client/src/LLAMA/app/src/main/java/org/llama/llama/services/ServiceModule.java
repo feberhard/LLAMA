@@ -26,4 +26,16 @@ public class ServiceModule {
     static IChatService providesIChatService() {
         return new ChatService();
     }
+
+    @Provides
+    @Singleton
+    static ILanguageService providesILanguageService() {
+        return new LanguageService();
+    }
+
+    @Provides
+    @Singleton
+    static ICountryService providesICountryService(){
+        return new CountryService();
+    }
 }

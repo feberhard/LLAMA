@@ -26,6 +26,8 @@ import org.llama.llama.MyApp;
 import org.llama.llama.R;
 import org.llama.llama.model.User;
 import org.llama.llama.services.IChatService;
+import org.llama.llama.services.ICountryService;
+import org.llama.llama.services.ILanguageService;
 import org.llama.llama.services.IUserService;
 
 import java.text.DateFormat;
@@ -44,6 +46,8 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
     IUserService userService;
     @Inject
     IChatService chatService;
+    @Inject
+    ILanguageService languageService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,10 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
                     public void onDone(Object result) {
                         User user = (User) result;
                         ((TextView) view.findViewById(android.R.id.text1)).setText(user.getName());
-                        ((ImageView) view.findViewById(android.R.id.icon)).setImageResource(R.mipmap.ic_launcher);
+//                        ((ImageView) view.findViewById(android.R.id.icon)).setImageResource(R.mipmap.ic_launcher);
+                        if (user.getDefaultLanguage() != null) {
+                            languageService.loadFlag(view, android.R.id.icon, user.getDefaultLanguage());
+                        }
                     }
                 });
             }
