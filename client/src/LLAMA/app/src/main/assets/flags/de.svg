@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-	"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 5 3">
-	<desc>Flag of Germany</desc>
-	<rect id="black_stripe" width="5" height="3" y="0" x="0" fill="#000"/>
-	<rect id="red_stripe" width="5" height="2" y="1" x="0" fill="#D00"/>
-	<rect id="gold_stripe" width="5" height="1" y="2" x="0" fill="#FFCE00"/>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- begin original Flag_of_Austria.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600">
+<rect width="900" height="600" fill="#d81e05" />
+<rect width="900" height="200" fill="#fff" y="200" />
+<!-- end original Flag_of_Austria.svg -->
+<!-- begin modified Flag_of_Germany.svg -->
+<polygon id="gold_stripe" points="0 600 900 0 900 600" fill="#FFCE00"/>
+<polygon id="red_stripe" points="300 400 900 0 900 400" fill="#D00" />
+<polygon id="black_stripe" points="600 200 900 0 900 200" fill="#000" />
+<!-- end modified Flag_of_Germany.svg -->
 </svg>
