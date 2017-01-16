@@ -24,9 +24,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jdeferred.DoneCallback;
+import org.jdeferred.Promise;
 import org.llama.llama.MyApp;
 import org.llama.llama.R;
 import org.llama.llama.chat.chatinfo.ChatInfoActivity;
+import org.llama.llama.model.User;
 import org.llama.llama.services.IChatService;
 import org.llama.llama.services.IUserService;
 import org.llama.llama.utils.ViewTools;
@@ -51,6 +54,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private String chatId;
     private String chatTitle;
     private boolean isGroup;
+    private User user;
+    private Promise userPromise;
 
     private ActionBar actionBar;
 
@@ -62,7 +67,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         actionBar = getSupportActionBar();
 
-
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         Bundle b = getIntent().getExtras();
@@ -73,6 +77,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             isGroup = b.getBoolean("isGroup");
             actionBar.setTitle(chatTitle);
         }
+
+        userPromise = userService.getUserInfo(userService.getCurrentUserId());
 
         // load chat partner's username, if it is a dialog
         if (!isGroup) {
@@ -107,7 +113,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         txtMessage = (EditText) findViewById(R.id.editTextNewMessage);
         findViewById(R.id.btn_send_message).setOnClickListener(this);
 
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.message_list_recycler);
+        final RecyclerView recycler = (RecyclerView) findViewById(R.id.message_list_recycler);
         recycler.setHasFixedSize(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 //        linearLayoutManager.setReverseLayout(true);
@@ -120,8 +126,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         query = ref
                 .orderByChild("timestamp");
 
-        mAdapter = new ChatAdapter(query, this.userService.getCurrentUserId(), this.userService);
-        recycler.setAdapter(mAdapter);
+
+        userPromise.done(new DoneCallback() {
+            @Override
+            public void onDone(Object result) {
+                user = (User)result;
+                mAdapter = new ChatAdapter(query, user, userService);
+                recycler.setAdapter(mAdapter);
+            }
+        });
 
         // Listen for title change events
         DatabaseReference titleRef = db.getReference().child("chats").child(chatId).child("title");
@@ -170,8 +183,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sendMessage() {
-        // TODO get message language from chat layout
-        String messageLanguage = "de";
+        if(this.user != null){
+            this.sendMessageLoaded();
+        }
+
+        userPromise.done(new DoneCallback() {
+            @Override
+            public void onDone(Object result) {
+                user = (User)result;
+                sendMessageLoaded();
+            }
+        });
+    }
+
+    private void sendMessageLoaded(){
+        String messageLanguage = this.user.getDefaultLanguage();
         String msg = txtMessage.getText().toString();
         String userId = this.userService.getCurrentUserId();
         String chatId = this.chatId;

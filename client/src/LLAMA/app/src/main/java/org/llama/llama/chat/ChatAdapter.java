@@ -11,9 +11,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import org.jdeferred.Promise;
 import org.llama.llama.AppConstant;
 import org.llama.llama.R;
 import org.llama.llama.model.Message;
+import org.llama.llama.model.User;
 import org.llama.llama.services.IUserService;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
     //    private LayoutInflater inflater = null;
     //    private List<Message> messages;
     private FirebaseArray mSnapshots;
-    private final String userId;
+    private final User user;
     private IUserService userService;
 
 //    public ChatAdapter(Context context, List<Message> messages) {
@@ -32,9 +34,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
 //        inflater = LayoutInflater.from(context);
 //    }
 
-    public ChatAdapter(FirebaseArray snapshots, String userId, IUserService userService) {
+    public ChatAdapter(FirebaseArray snapshots, User user, IUserService userService) {
 //        inflater = LayoutInflater.from(context);
-        this.userId = userId;
+        this.user = user;
         this.mSnapshots = snapshots;
         this.userService = userService;
 
@@ -66,8 +68,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
         });
     }
 
-    public ChatAdapter(Query ref, String userId, IUserService userService) {
-        this(new FirebaseArray(ref), userId, userService);
+    public ChatAdapter(Query ref, User user, IUserService userService) {
+        this(new FirebaseArray(ref), user, userService);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
             case AppConstant.MESSAGE_ITEM_ME:
                 return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_me, parent, false));
             case AppConstant.MESSAGE_ITEM_THEM:
-                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false), "en"); // TODO use prefered language
+                return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item_them, parent, false), user.getDefaultLanguage());
             case AppConstant.MULTIMEDIA_ITEM:
                 return new MultimediaViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.multimedia_item, parent, false));
         }
@@ -112,7 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder<Message, IU
             if (!Message.TEXT.equals(msg.getType())) { // multimedia
                 msg.setViewType(AppConstant.MULTIMEDIA_ITEM);
             } else {
-                if (msg.getUser().equals(this.userId)) {
+                if (msg.getUser().equals(this.user.getId())) {
                     msg.setViewType(AppConstant.MESSAGE_ITEM_ME);
                 } else {
                     msg.setViewType(AppConstant.MESSAGE_ITEM_THEM);

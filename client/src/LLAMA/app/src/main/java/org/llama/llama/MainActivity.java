@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,12 +19,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,10 +36,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.jdeferred.DoneCallback;
+import org.jdeferred.Promise;
 import org.llama.llama.auth.SignInActivity;
 import org.llama.llama.chat.ChatActivity;
 import org.llama.llama.map.MapsActivity;
 import org.llama.llama.model.Chat;
+import org.llama.llama.model.User;
 import org.llama.llama.services.IChatService;
 import org.llama.llama.services.IUserService;
 import org.llama.llama.settings.SettingsActivity;
@@ -56,6 +64,7 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     IUserService userService;
+
     private List<Chat> chats;
 
     private ListView chatList;
@@ -202,59 +211,140 @@ public class MainActivity extends AppCompatActivity
     public void updateChatList() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+        final String userId = this.userService.getCurrentUserId();
+
         DatabaseReference ref = database.getReference()
                 .child("users")
-                .child(this.userService.getCurrentUserId())
+                .child(userId)
                 .child("chats");
 
-        // TODO probably seperate childEventListener
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        BaseAdapter adapter = new FirebaseListAdapter<Object>(this, Object.class, R.layout.chat_item, ref) {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    final String chatId = ds.getKey();
-                    // TODO possible false value
-
-                    DatabaseReference chatRef = database.getReference().child("chats").child(chatId);
-                    chatRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Chat c = dataSnapshot.getValue(Chat.class);
-                            c.setId(chatId);
-                            addChat(c);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+            protected void populateView(final View view, Object omodel, int position) {
+                Pair<String, Boolean> model = (Pair<String, Boolean>) omodel;
+                final String chatId = model.first;
+                Boolean isInChat = model.second;
+                if(!isInChat){
+                    return;
                 }
+
+                DatabaseReference chatsRef = database.getReference()
+                        .child("chats")
+                        .child(model.first);
+
+                final TextView chatName = (TextView) view.findViewById(R.id.txtChatName);
+                final TextView lastMessage = (TextView) view.findViewById(R.id.txtLastMessage);
+                final ImageView chatImage = (ImageView) view.findViewById(R.id.imgChatOverview);
+
+                chatsRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Chat chat = dataSnapshot.getValue(Chat.class);
+                        chat.setId(chatId);
+
+                        //Assign the appropriate data from our alert object above
+                        lastMessage.setText(chat.getLastMessage());
+                        if (chat.getType().equals("group")) { // group
+                            chatName.setText(chat.getTitle());
+                            chatImage.setImageResource(R.drawable.ic_group);
+                        } else if (chat.getType().equals("dialog")) { // dialog
+                            chatImage.setImageResource(R.drawable.ic_person);
+
+                            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference ref = database.getReference().child("members").child(chat.getId());
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                                        String asdf = messageSnapshot.getKey();
+                                        String childUserId = messageSnapshot.getKey();
+                                        if (!childUserId.equals(userId)) {
+                                            Promise p = userService.getUserInfo(childUserId);
+                                            p.done(new DoneCallback() {
+                                                @Override
+                                                public void onDone(Object result) {
+                                                    User user = (User) result;
+                                                    chatName.setText(user.getName());
+                                                }
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            protected Pair<String, Boolean> parseSnapshot(DataSnapshot snapshot) {
+                // chatid:string, isInChat:boolean
+                return new Pair<>(snapshot.getKey(), snapshot.getValue(Boolean.class));
             }
-        });
+        };
+        chatList.setAdapter(adapter);
+
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    final String chatId = ds.getKey();
+//                    // TODO possible false value
+//
+//                    DatabaseReference chatRef = database.getReference().child("chats").child(chatId);
+//                    chatRef.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            Chat c = dataSnapshot.getValue(Chat.class);
+//                            c.setId(chatId);
+//                            addChat(c);
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
-    Map<String, Chat> chatMap = new HashMap<>();
-
-    public synchronized void addChat(Chat c) {
-        chatMap.put(c.getId(), c);
-
-        List<Chat> sortedChats = new ArrayList<>(chatMap.values());
-        Collections.sort(sortedChats, new Comparator<Chat>() {
-            @Override
-            public int compare(Chat c1, Chat c2) {
-                return (int) (c1.getTimestamp() - c2.getTimestamp());
-            }
-        });
-
-        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this, R.layout.chat_item, sortedChats, this.userService.getCurrentUserId(), this.userService);
-        chatList.setAdapter(chatsAdapter);
-    }
+//    Map<String, Chat> chatMap = new HashMap<>();
+//
+//    public synchronized void addChat(Chat c) {
+//        chatMap.put(c.getId(), c);
+//
+//        List<Chat> sortedChats = new ArrayList<>(chatMap.values());
+//        Collections.sort(sortedChats, new Comparator<Chat>() {
+//            @Override
+//            public int compare(Chat c1, Chat c2) {
+//                return (int) (c1.getTimestamp() - c2.getTimestamp());
+//            }
+//        });
+//
+//        ArrayAdapter chatsAdapter = new ChatsAdapter(MainActivity.this,
+//                R.layout.chat_item,
+//                sortedChats,
+//                this.userService.getCurrentUserId(),
+//                this.userService);
+//        chatList.setAdapter(chatsAdapter);
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

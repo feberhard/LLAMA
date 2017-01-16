@@ -55,7 +55,6 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_chat_info);
         ((MyApp) getApplication()).getServiceComponent().inject(this);
 
-
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -74,7 +73,7 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
                 .child("members")
                 .child(chatId);
 
-        BaseAdapter adapter = new FirebaseListAdapter<Object>(this, Object.class, android.R.layout.activity_list_item, ref) {
+        BaseAdapter adapter = new FirebaseListAdapter<Object>(this, Object.class, R.layout.user_info_item, ref) {
             @Override
             protected void populateView(final View view, Object omodel, int position) {
                 Pair<String, Long> model = (Pair<String, Long>) omodel;
@@ -83,10 +82,11 @@ public class ChatInfoActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onDone(Object result) {
                         User user = (User) result;
-                        ((TextView) view.findViewById(android.R.id.text1)).setText(user.getName());
-//                        ((ImageView) view.findViewById(android.R.id.icon)).setImageResource(R.mipmap.ic_launcher);
+                        ((TextView) view.findViewById(R.id.txtDisplayName)).setText(user.getName());
+                        ((TextView) view.findViewById(R.id.txtUsername)).setText(getString(R.string.username) + ": " + user.getUsername());
+                        ((TextView) view.findViewById(R.id.txtMood)).setText(getString(R.string.mood) + ": " + user.getMood());
                         if (user.getDefaultLanguage() != null) {
-                            languageService.loadFlag(view, android.R.id.icon, user.getDefaultLanguage());
+                            languageService.loadFlag(view, R.id.imgLanguage, user.getDefaultLanguage());
                         }
                     }
                 });
