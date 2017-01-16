@@ -9,22 +9,26 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="Import"
+            android:visible="false" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Gallery"
+            android:visible="false" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Update Token" />
+            android:title="Update Token"
+            android:visible="false" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@android:drawable/ic_dialog_map"
             android:title="Map" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Communicate"
+        android:visible="false">
         <menu>
             <item
                 android:id="@+id/nav_share"
