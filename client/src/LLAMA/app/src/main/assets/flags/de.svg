@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="2700" height="1800">
-	<rect width="2700" height="1800" fill="#d81e05"/>
-	<path d="M 2700,0 H 0 V 600 H 1800 z" fill="#000"/>
-	<path d="M 1800,600 H 2700 V 1200 H 900 z" fill="#fff"/>
-	<path d="M 900,1200 H 0 V 1800 z" fill="#ffce00"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- begin original Flag_of_Austria.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600">
+<rect width="900" height="600" fill="#d81e05" />
+<rect width="900" height="200" fill="#fff" y="200" />
+<!-- end original Flag_of_Austria.svg -->
+<!-- begin modified Flag_of_Germany.svg -->
+<polygon id="gold_stripe" points="0 600 900 0 900 600" fill="#FFCE00"/>
+<polygon id="red_stripe" points="300 400 900 0 900 400" fill="#D00" />
+<polygon id="black_stripe" points="600 200 900 0 900 200" fill="#000" />
+<!-- end modified Flag_of_Germany.svg -->
 </svg>
