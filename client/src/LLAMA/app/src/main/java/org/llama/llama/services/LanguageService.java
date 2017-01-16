@@ -127,8 +127,6 @@ public class LanguageService implements ILanguageService {
 
             // draw flag on imageView
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(Color.BLACK);
-            canvas.drawCircle(50, 50, 10, paint);
             imageView.setImageBitmap(bitmap);
         }
 
