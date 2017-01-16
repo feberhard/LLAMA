@@ -174,4 +174,11 @@ public class UserService implements IUserService {
         if (user != null)
             user.setLanguages(langs);
     }
+
+    @Override
+    public void updateCurrentUserNotifications(Boolean notifications) {
+        User user = userCache.get(updateUserProperty("notifications", notifications));
+        if (user != null)
+            user.setNotifications(notifications);
+    }
 }

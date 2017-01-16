@@ -17,7 +17,9 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -133,6 +135,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         }
                     }
                     break;
+                case "notifications_new_message":
+                    Boolean boolValue = (Boolean) value;
+                    if (!((SwitchPreference) preference).isChecked() == boolValue) {
+                        userService.updateCurrentUserNotifications(boolValue);
+                    }
+                    break;
             }
 
             if (preference instanceof ListPreference) {
@@ -178,6 +186,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         preference.setSummary(name);
                     }
                 }
+            } else if (preference instanceof SwitchPreference) {
+                // nothing to do
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -453,11 +463,31 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 
+            IUserService userService = new UserService();
+            Promise pu = userService.getUserInfo(userService.getCurrentUserId());
+
+            final SwitchPreference notificationsPref = (SwitchPreference) findPreference("notifications_new_message");
+
+            pu.done(new DoneCallback() {
+                @Override
+                public void onDone(Object result) {
+                    final User user = (User) result;
+
+                    notificationsPref.setChecked(user.getNotifications());
+                    notificationsPref.setDefaultValue(user.getNotifications());
+                    bindPreferenceSummaryToValue(notificationsPref);
+                }
+            });
+
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+
+            PreferenceScreen screen = getPreferenceScreen();
+            screen.removePreference(findPreference("notifications_new_message_ringtone"));
+            screen.removePreference(findPreference("notifications_new_message_vibrate"));
         }
 
         @Override

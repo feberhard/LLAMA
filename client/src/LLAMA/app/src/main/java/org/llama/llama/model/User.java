@@ -27,6 +27,7 @@ public class User {
     private String mood;
     private String name;
     private String username;
+    private Boolean notifications;
 
     public Map<String, Object> getChats() {
         return chats;
@@ -126,5 +127,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Boolean getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Boolean notifications) {
+        this.notifications = notifications;
     }
 }

@@ -22,4 +22,5 @@ public interface IUserService {
     void updateCurrentUserCountry(String countryId);
     void updateCurrentUserLanguages(Set<String> languages);
     void updateCurrentUserDefaultLanguage(String defaultLanguageId);
+    void updateCurrentUserNotifications(Boolean notifications);
 }

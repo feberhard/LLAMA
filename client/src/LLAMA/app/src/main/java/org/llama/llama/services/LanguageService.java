@@ -1,10 +1,7 @@
 package org.llama.llama.services;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -126,7 +123,6 @@ public class LanguageService implements ILanguageService {
             svg.renderToCanvas(canvas);
 
             // draw flag on imageView
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             imageView.setImageBitmap(bitmap);
         }
 
