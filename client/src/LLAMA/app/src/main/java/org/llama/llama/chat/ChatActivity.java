@@ -130,7 +130,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         userPromise.done(new DoneCallback() {
             @Override
             public void onDone(Object result) {
-                user = (User)result;
+                user = (User) result;
                 mAdapter = new ChatAdapter(query, user, userService);
                 recycler.setAdapter(mAdapter);
             }
@@ -183,20 +183,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sendMessage() {
-        if(this.user != null){
+        if (this.user != null) {
             this.sendMessageLoaded();
         }
 
         userPromise.done(new DoneCallback() {
             @Override
             public void onDone(Object result) {
-                user = (User)result;
+                user = (User) result;
                 sendMessageLoaded();
             }
         });
     }
 
-    private void sendMessageLoaded(){
+    private void sendMessageLoaded() {
         String messageLanguage = this.user.getDefaultLanguage();
         String msg = txtMessage.getText().toString();
         String userId = this.userService.getCurrentUserId();
@@ -210,7 +210,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAdapter.cleanup();
+        if (mAdapter != null) {
+            mAdapter.cleanup();
+        }
     }
 
     @Override
