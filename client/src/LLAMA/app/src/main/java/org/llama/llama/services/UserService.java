@@ -92,6 +92,10 @@ public class UserService implements IUserService {
 
     @Override
     public void updateFirebaseInstanceIdToken(String token) {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            return;
+        }
+        
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         DatabaseReference ref = database.getReference().child("users").child(getCurrentUserId()).child("firebaseInstanceIdToken");
