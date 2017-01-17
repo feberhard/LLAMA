@@ -118,7 +118,8 @@ public class SignInActivity extends BaseActivity implements
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    userService.updateFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
+                    userService.createUserIfNotExists();
+//                    userService.updateFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

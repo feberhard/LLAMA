@@ -23,4 +23,5 @@ public interface IUserService {
     void updateCurrentUserLanguages(Set<String> languages);
     void updateCurrentUserDefaultLanguage(String defaultLanguageId);
     void updateCurrentUserNotifications(Boolean notifications);
+    void createUserIfNotExists();
 }

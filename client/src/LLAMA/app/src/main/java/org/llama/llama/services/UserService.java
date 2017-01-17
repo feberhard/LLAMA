@@ -3,6 +3,7 @@ package org.llama.llama.services;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jdeferred.Deferred;
 import org.jdeferred.Promise;
@@ -19,6 +21,7 @@ import org.llama.llama.model.Country;
 import org.llama.llama.model.User;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -92,10 +95,10 @@ public class UserService implements IUserService {
 
     @Override
     public void updateFirebaseInstanceIdToken(String token) {
-        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             return;
         }
-        
+
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         DatabaseReference ref = database.getReference().child("users").child(getCurrentUserId()).child("firebaseInstanceIdToken");
@@ -122,7 +125,7 @@ public class UserService implements IUserService {
 //                });
 //    }
 
-    private <T> String  updateUserProperty(String property, T value) {
+    private <T> String updateUserProperty(String property, T value) {
         String userId = getCurrentUserId();
         FirebaseDatabase.getInstance().getReference()
                 .child("users")
@@ -184,5 +187,53 @@ public class UserService implements IUserService {
         User user = userCache.get(updateUserProperty("notifications", notifications));
         if (user != null)
             user.setNotifications(notifications);
+    }
+
+    @Override
+    public void createUserIfNotExists() {
+        final String phoneLanguage = Locale.getDefault().getLanguage();
+        final String phoneCountry = Locale.getDefault().getCountry();
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference().child("users").child(getCurrentUserId());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    User user = new User();
+                    user.setFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
+
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    String email = firebaseUser.getEmail();
+                    user.setEmail(email);
+                    String displayName = firebaseUser.getDisplayName();
+                    user.setName(displayName == null ? email : displayName);
+                    user.setMood("");
+                    user.setNotifications(true);
+                    user.setUsername(firebaseUser.getEmail());
+                    user.setLocation(0.0, 0.0);
+                    final String phoneLanguage = Locale.getDefault().getLanguage();
+                    final String phoneCountry = Locale.getDefault().getCountry();
+                    user.setLanguages(new HashMap<String, Object>() {
+                        {
+                            put(phoneLanguage, true);
+                        }
+                    });
+                    user.setDefaultLanguage(phoneLanguage);
+                    user.setCountry(phoneCountry);
+
+                    // save user
+                    database.getReference().child("users").child(getCurrentUserId()).setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
+//                .child("firebaseInstanceIdToken");
+//        ref.setValue(token);
     }
 }

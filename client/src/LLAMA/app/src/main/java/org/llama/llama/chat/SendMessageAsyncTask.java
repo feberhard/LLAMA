@@ -28,7 +28,8 @@ public class SendMessageAsyncTask extends AsyncTask<String, Integer, Integer> {
 
         URL serverUrl;
         try {
-            serverUrl = new URL("http://woernsn.net:8888");
+//            serverUrl = new URL("http://woernsn.net:8888");
+            serverUrl = new URL("http://79.143.191.191:8888");
             HttpURLConnection conn = (HttpURLConnection) serverUrl.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
