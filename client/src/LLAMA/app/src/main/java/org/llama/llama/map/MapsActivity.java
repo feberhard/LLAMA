@@ -4,6 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Picture;
+import android.graphics.Rect;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,9 +30,12 @@ import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.OnMapReadyCallback;
 import com.androidmapsextensions.SupportMapFragment;
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 import com.google.android.gms.location.LocationServices;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,19 +45,27 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.llama.llama.MyApp;
 import org.llama.llama.PermissionRequests;
 import org.llama.llama.R;
+import org.llama.llama.services.IChatService;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.inject.Inject;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ValueEventListener, GoogleMap.OnMarkerClickListener {
 
-    private final static Double COORDINATES_OFFSET = 0.005;
+    private final static Double COORDINATES_OFFSET = 0.008;
     private final static long TIMER_PERIOD = 5000;
 
     DatabaseReference usersRef;
     DatabaseReference myLocationRef;
+
+    @Inject
+    IChatService chatService;
 
     private GoogleMap mMap;
     private LatLng myLatLng;
@@ -56,6 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Timer timer;
     private TimerTask timerTask;
     private boolean timerActive;
+
+    private String lastUser;
 
     @Override
     protected void onResume() {
@@ -74,6 +93,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MyApp) getApplication()).getServiceComponent().inject(this);
+
+        this.lastUser = "";
 
         // is access granted?
         ActivityCompat.requestPermissions(this,
@@ -192,7 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             // check longitude
             Double longitude = user.child("location/1").getValue(Double.class);
-            if(longitude.compareTo(myLatLng.longitude-COORDINATES_OFFSET) < 1 || longitude.compareTo(myLatLng.longitude+COORDINATES_OFFSET) > 1)
+            if (longitude.compareTo(myLatLng.longitude - COORDINATES_OFFSET) < 1 || longitude.compareTo(myLatLng.longitude + COORDINATES_OFFSET) > 1)
                 continue;
 
             Log.d("MAP", user.child("username").getValue(String.class) != null ? user.child("username").getValue(String.class) : "anonymous");
@@ -201,8 +223,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String username = user.child("username").getValue(String.class);
             String userId = user.getKey();
             String country = user.child("country").getValue(String.class);
+            String mood = user.child("mood").getValue(String.class);
+            String defaultLanguage = user.child("defaultLanguage").getValue(String.class);
 
-            mMap.addMarker(new MarkerOptions().data(userId).draggable(false).position(new LatLng(latitude, longitude)).title(username).snippet(country));
+            MarkerOptions mo = new MarkerOptions()
+                    .data(username)
+                    .draggable(false)
+                    .position(new LatLng(latitude, longitude))
+                    .title(username)
+                    .snippet(country + " | \"" + mood + "\"");
+
+
+            // read a flag from the assets folder
+            SVG svg = null;
+            try {
+                svg = SVG.getFromAsset(MyApp.getAppContext().getAssets(), "flags/" + defaultLanguage + ".svg");
+            } catch (SVGParseException | IOException e) {
+                Log.d("MAP", "Error loading svg for default language " + defaultLanguage);
+            }
+            // create a canvas to draw onto
+            if (svg.getDocumentWidth() != -1) {
+                Bitmap bitmap = Bitmap.createBitmap(100, 75, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawPicture(svg.renderToPicture(), new Rect(0, 0, 100, 75));
+
+                mo.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            }
+
+            mMap.addMarker(mo);
         }
     }
 
@@ -213,8 +261,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        // TODO show user and create chat
-        String userId = marker.getData();
+        String username = marker.getData();
+        if (this.lastUser.equals(username)) {
+            chatService.createDialogChat(username);
+            this.lastUser = "";
+            Toast.makeText(this, "A new chat was created in your Chatlist.", Toast.LENGTH_LONG).show();
+        } else {
+            this.lastUser = username;
+            Toast.makeText(this, "Click again to create a new dialog in the chat list.", Toast.LENGTH_LONG).show();
+        }
 
         return false;
     }

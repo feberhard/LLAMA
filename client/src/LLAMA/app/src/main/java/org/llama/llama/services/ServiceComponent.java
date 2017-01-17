@@ -6,6 +6,7 @@ import org.llama.llama.MyFirebaseInstanceIDService;
 import org.llama.llama.auth.SignInActivity;
 import org.llama.llama.chat.ChatActivity;
 import org.llama.llama.chat.chatinfo.ChatInfoActivity;
+import org.llama.llama.map.MapsActivity;
 
 import javax.inject.Singleton;
 
@@ -23,4 +24,5 @@ public interface ServiceComponent {
     void inject(MyFirebaseInstanceIDService myFirebaseInstanceIDService);
     void inject(ChatActivity chatActivity);
     void inject(ChatInfoActivity chatInfoActivity);
+    void inject(MapsActivity mapsActivity);
 }
