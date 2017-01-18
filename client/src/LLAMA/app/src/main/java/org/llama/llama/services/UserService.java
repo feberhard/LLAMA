@@ -1,6 +1,8 @@
 package org.llama.llama.services;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -9,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -136,6 +139,38 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public void updateCurrentUserName(final String username, final Runnable alreadyTakenAction) {
+        final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+
+        Query query = usersRef.orderByChild("username").startAt(username).endAt(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 1) {
+                    Log.d("SETTINGS", "Username already existed!");
+                    alreadyTakenAction.run();
+                    return;
+                }
+
+                String userId = getCurrentUserId();
+
+                usersRef.child(userId)
+                        .child("username")
+                        .setValue(username);
+
+                User user = userCache.get(userId);
+                if (user != null)
+                    user.setUsername(username);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
     public void updateCurrentUserDisplayName(String displayName) {
         User user = userCache.get(updateUserProperty("displayname", displayName));
         if (user != null)
@@ -191,9 +226,6 @@ public class UserService implements IUserService {
 
     @Override
     public void createUserIfNotExists() {
-        final String phoneLanguage = Locale.getDefault().getLanguage();
-        final String phoneCountry = Locale.getDefault().getCountry();
-
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("users").child(getCurrentUserId());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -231,9 +263,5 @@ public class UserService implements IUserService {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-
-//                .child("firebaseInstanceIdToken");
-//        ref.setValue(token);
     }
 }

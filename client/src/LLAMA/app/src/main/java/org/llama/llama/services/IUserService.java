@@ -16,6 +16,7 @@ public interface IUserService {
     Promise getUserInfo(final String userId);
     void updateUserCache(User user);
     void updateFirebaseInstanceIdToken(String token);
+    void updateCurrentUserName(String userName, Runnable alreadyTakenAction);
     void updateCurrentUserDisplayName(String displayName);
     void updateCurrentUserMood(String mood);
     void updateCurrentUserEmail(String email);

@@ -23,11 +23,13 @@ import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.common.base.Joiner;
 
 import org.jdeferred.DoneCallback;
 import org.jdeferred.Promise;
+import org.llama.llama.MyApp;
 import org.llama.llama.R;
 import org.llama.llama.model.Country;
 import org.llama.llama.model.Language;
@@ -68,47 +70,68 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+            final String stringValue = value.toString();
 
             IUserService userService = new UserService();
 
             switch (preference.getKey()) {
+                case "pref_user_name":
+                    final EditTextPreference pref = (EditTextPreference) preference;
+                    final String oldUsername = pref.getText();
+
+                    if (!stringValue.equals(pref.getText())) {
+                        userService.updateCurrentUserName(stringValue, new Runnable() {
+                            @Override
+                            public void run() {
+                                pref.setText(oldUsername);
+                                pref.setSummary(oldUsername);
+
+                                Context context = MyApp.getAppContext();
+                                CharSequence text = "Username '" + stringValue + "' is already taken.";
+                                int duration = Toast.LENGTH_SHORT;
+
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
+                        });
+                    }
+                    break;
                 case "pref_display_name":
-                    if (!((EditTextPreference) preference).getText().equals(stringValue)) {
+                    if (!stringValue.equals(((EditTextPreference) preference).getText())) {
                         userService.updateCurrentUserDisplayName(stringValue);
                     }
                     break;
                 case "pref_mood":
-                    if (!((EditTextPreference) preference).getText().equals(stringValue)) {
+                    if (!stringValue.equals(((EditTextPreference) preference).getText())) {
                         userService.updateCurrentUserMood(stringValue);
                     }
                     break;
                 case "pref_email":
-                    if (!((EditTextPreference) preference).getText().equals(stringValue)) {
+                    if (!stringValue.equals(((EditTextPreference) preference).getText())) {
                         userService.updateCurrentUserEmail(stringValue);
                     }
                     break;
                 case "pref_country":
-                    if (!((ListPreference) preference).getValue().equals(stringValue)) {
+                    if (!stringValue.equals(((ListPreference) preference).getValue())) {
                         userService.updateCurrentUserCountry(stringValue);
                     }
                     break;
                 case "pref_default_language":
                     langPref = (ListPreference) preference;
-                    if (!(langPref.getValue().equals(stringValue))) {
+                    if (!stringValue.equals(langPref.getValue())) {
                         userService.updateCurrentUserDefaultLanguage(stringValue);
                     }
                     break;
                 case "pref_languages":
                     Set<String> values = (Set<String>) value;
-                    MultiSelectListPreference pref = (MultiSelectListPreference) preference;
+                    MultiSelectListPreference msPref = (MultiSelectListPreference) preference;
 
                     // there needs to be at least one language
                     if (values.isEmpty()) {
                         values.add("ll");
                     }
 
-                    if (!(pref.getValues().equals(values))) {
+                    if (!values.equals(msPref.getValues())) {
                         userService.updateCurrentUserLanguages(values);
 
                         // update pref_default_language
@@ -116,10 +139,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             List<String> entries = new ArrayList<>();
                             CharSequence[] entryValues = values.toArray(new CharSequence[entries.size()]);
 
-                            CharSequence[] allEntries = pref.getEntries();
+                            CharSequence[] allEntries = msPref.getEntries();
 
                             for (String v : values) {
-                                entries.add((String) allEntries[pref.findIndexOfValue(v)]);
+                                entries.add((String) allEntries[msPref.findIndexOfValue(v)]);
                             }
 
                             langPref.setEntries(entries.toArray(new CharSequence[entries.size()]));
@@ -137,7 +160,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     break;
                 case "notifications_new_message":
                     Boolean boolValue = (Boolean) value;
-                    if (!((SwitchPreference) preference).isChecked() == boolValue) {
+                    if (boolValue == !((SwitchPreference) preference).isChecked()) {
                         userService.updateCurrentUserNotifications(boolValue);
                     }
                     break;
@@ -314,7 +337,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final Promise pc = countryService.getCountries();
 
             final EditTextPreference namePref = (EditTextPreference) findPreference("pref_display_name");
-            final Preference usernamePref = findPreference("pref_user_name");
+            final EditTextPreference usernamePref = (EditTextPreference) findPreference("pref_user_name");
             final EditTextPreference moodPref = (EditTextPreference) findPreference("pref_mood");
             final EditTextPreference emailPref = (EditTextPreference) findPreference("pref_email");
             final ListPreference countryPref = (ListPreference) findPreference("pref_country");
@@ -330,8 +353,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     namePref.setSummary(user.getName());
                     bindPreferenceSummaryToValue(namePref);
 
+                    usernamePref.setText(user.getUsername());
                     usernamePref.setSummary(user.getUsername());
-                    //bindPreferenceSummaryToValue(usernamePref);
+                    bindPreferenceSummaryToValue(usernamePref);
 
                     moodPref.setText(user.getMood());
                     moodPref.setSummary(user.getMood());
