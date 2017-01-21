@@ -242,6 +242,9 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Chat c = dataSnapshot.getValue(Chat.class);
+                        if(c == null){
+                            return;
+                        }
                         c.setId(chatId);
                         addChat(c);
                     }
