@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="42cm" height="29cm" viewBox="85 118 829 570" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Background">
+    <g>
+      <path style="fill: #000077; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" d="M 140.826 329 C 140.538,329 140.304,329.234 140.304,329.522 L 140.304,368.478 C 140.304,368.766 140.538,369 140.826,369 L 157.174,369 C 157.462,369 157.696,368.766 157.696,368.478 L 157.696,329.522 C 157.696,329.234 157.462,329 157.174,329 L 140.826,329z"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="145.522" y1="331.087" x2="145.522" y2="333.87"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="147.261" y1="330.739" x2="147.261" y2="334.217"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="149" y1="330.739" x2="149" y2="334.217"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="150.739" y1="330.739" x2="150.739" y2="334.217"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="152.478" y1="331.087" x2="152.478" y2="333.87"/>
+      <path style="fill: #90ee90; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" d="M 142.565 335.957 C 142.277,335.957 142.044,336.19 142.044,336.478 L 142.044,342.391 C 142.044,342.679 142.277,342.913 142.565,342.913 L 155.435,342.913 C 155.723,342.913 155.957,342.679 155.957,342.391 L 155.957,336.478 C 155.957,336.19 155.723,335.957 155.435,335.957 L 142.565,335.957z"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="142.044" y="344.652" width="5.21739" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="150.739" y="344.652" width="5.21739" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="142.044" y="348.13" width="5.21739" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="150.739" y="348.13" width="5.21739" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="142.044" y="351.609" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="147.261" y="351.609" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="152.478" y="351.609" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="142.044" y="355.087" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="147.261" y="355.087" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="152.478" y="355.087" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="142.044" y="358.565" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="147.261" y="358.565" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="152.478" y="358.565" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="142.044" y="362.043" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="147.261" y="362.043" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <rect style="fill: #bfbfbf; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="152.478" y="362.043" width="3.47826" height="1.73913" rx="0" ry="0"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="145.522" y1="365.87" x2="145.522" y2="366.913"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="147.261" y1="365.522" x2="147.261" y2="367.261"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="149" y1="365.522" x2="149" y2="367.261"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="150.739" y1="365.522" x2="150.739" y2="367.261"/>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x1="152.478" y1="365.87" x2="152.478" y2="366.913"/>
+    </g>
+    <g>
+      <rect style="fill: #b3b3b3; fill-opacity: 1; stroke-opacity: 1; stroke-width: 1.6; stroke: #000000" x="449.809" y="299.546" width="39.0431" height="91.1005" rx="0" ry="0"/>
+      <rect style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x="453.713" y="305.012" width="31.2344" height="10.4115" rx="0" ry="0"/>
+      <rect style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x="453.713" y="315.424" width="31.2344" height="10.4115" rx="0" ry="0"/>
+      <rect style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x="453.713" y="325.835" width="31.2344" height="10.4115" rx="0" ry="0"/>
+      <rect style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x="453.713" y="336.246" width="31.2344" height="10.4115" rx="0" ry="0"/>
+      <rect style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x="453.713" y="348.74" width="19.5215" height="6.24689" rx="0" ry="0"/>
+      <ellipse style="fill: #00ff00; fill-opacity: 1; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="482.995" cy="349.781" rx="1.36651" ry="1.36651"/>
+      <ellipse style="fill: #ffff00; fill-opacity: 1; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="482.995" cy="353.946" rx="1.36651" ry="1.36651"/>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" x="475.187" y="350.823" width="4.68517" height="4.16459" rx="0" ry="0"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" d="M 456.316 363.316 L 456.316,386.091"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" d="M 462.823 363.316 L 462.823,386.091"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" d="M 469.33 363.316 L 469.33,386.091"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" d="M 475.837 363.316 L 475.837,386.091"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" d="M 482.344 363.316 L 482.344,386.091"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" d="M 488.852 363.316 L 488.852,386.091"/>
+      <polygon style="fill: #999999; fill-opacity: 1; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" fill-rule="evenodd" points="442,398.455 449.809,382.838 449.809,390.646 488.852,390.646 488.852,382.838 499.263,398.455 "/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="470.632" y="413.058">
+        <tspan x="470.632" y="413.058">Llama Server</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke: none" x="282" y="514" width="34" height="30" rx="0" ry="0"/>
+      <ellipse style="fill: #ffffff; fill-opacity: 1; stroke: none" cx="299" cy="544" rx="17" ry="5"/>
+      <ellipse style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="299" cy="514" rx="17" ry="5"/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" d="M 316 514 L 316,544 C 316,546.761 308.389,549 299,549 C 289.611,549 282,546.761 282,544 L 282,514"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="299" y="561">
+        <tspan x="299" y="561">Google Firebase </tspan>
+        <tspan x="299" y="577">Realtime Database</tspan>
+      </text>
+    </g>
+    <g>
+      <path style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" d="M 730.667 326.385 C 711.563,326.066 674.513,332.764 679.723,347.118 C 684.933,361.472 709.826,364.662 720.247,360.516 C 730.667,356.369 704.037,380.611 754.982,386.991 C 805.926,393.37 831.977,383.163 824.451,375.826 C 816.925,368.49 869.027,393.051 893.341,379.016 C 917.656,364.981 868.448,351.584 878.869,353.498 C 889.289,355.412 921.129,352.86 910.709,328.937 C 900.288,305.013 806.504,323.514 816.925,320.005 C 827.345,316.496 801.294,298.953 768.876,302.461 C 736.456,305.97 734.157,312.337 730.683,326.372 L 730.667,326.385z"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="804.432" y="351.826">
+        <tspan x="804.432" y="351.826">google-translate-api</tspan>
+      </text>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="491" y1="328" x2="685" y2="328.946"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="684.976,333.946 695,328.995 685.025,323.946 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="549" y="382">
+      <tspan x="549" y="382">message</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="698" y1="361" x2="503" y2="361"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="503,356 493,361 503,366 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="527" y="303">
+      <tspan x="527" y="303">translated message</tspan>
+      <tspan x="527" y="319">(REST)</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="158.678" y1="349" x2="438.018" y2="349"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="438.018,354 448.018,349.001 438.018,344 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="255" y="334">
+      <tspan x="255" y="334">message</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="441.487" y1="380.11" x2="324.512" y2="504.971"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="445.135,383.529 448.323,372.813 437.838,376.692 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="320.863,501.552 317.675,512.269 328.16,508.389 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="398" y="467">
+      <tspan x="398" y="467">message,</tspan>
+      <tspan x="398" y="483">translated message</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="286.008" y1="510.186" x2="165.761" y2="368.719"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="169.571,365.481 159.285,361.1 161.952,371.957 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="191" y="465">
+      <tspan x="191" y="465">chats,</tspan>
+      <tspan x="191" y="481">users,</tspan>
+      <tspan x="191" y="497">...</tspan>
+    </text>
+    <g>
+      <path style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" d="M 247.635 140.467 C 231.445,140.207 200.048,145.651 204.463,157.315 C 208.878,168.98 229.974,171.572 238.804,168.202 C 247.635,164.832 225.068,184.532 268.24,189.716 C 311.411,194.9 333.488,186.606 327.11,180.644 C 320.733,174.682 364.886,194.641 385.49,183.236 C 406.095,171.831 364.395,160.944 373.226,162.499 C 382.056,164.055 409.039,161.981 400.208,142.54 C 391.378,123.1 311.902,138.134 320.733,135.282 C 329.563,132.431 307.487,118.175 280.014,121.026 C 252.541,123.877 250.592,129.051 247.649,140.456 L 247.635,140.467z"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="310.146" y="153.89">
+        <tspan x="310.146" y="153.89">Google Firebase</tspan>
+        <tspan x="310.146" y="169.89">Cloud Messaging</tspan>
+      </text>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="449.039" y1="323.919" x2="335.884" y2="192.48"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="339.674,189.218 329.36,184.902 332.095,195.742 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="405" y="224">
+      <tspan x="405" y="224">message,</tspan>
+      <tspan x="405" y="240">translated message</tspan>
+      <tspan x="405" y="256">(XMPP)</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="276.243" y1="191.485" x2="165.615" y2="328.432"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="161.726,325.29 159.331,336.211 169.505,331.574 "/>
+    </g>
+    <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="85.8" y="210.7">
+      <tspan x="85.8" y="210.7">notification,</tspan>
+      <tspan x="85.8" y="226.7">message*,</tspan>
+      <tspan x="85.8" y="242.7">translated message*</tspan>
+      <tspan x="85.8" y="258.7">(Firebase Messages)</tspan>
+    </text>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="143" y="684">
+      <tspan x="143" y="684">* are read directly from the Database, not the message</tspan>
+    </text>
+  </g>
+</svg>
