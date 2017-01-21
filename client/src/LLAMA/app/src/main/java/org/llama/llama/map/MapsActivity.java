@@ -58,7 +58,7 @@ import javax.inject.Inject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ValueEventListener, GoogleMap.OnMarkerClickListener {
 
-    private final static Double COORDINATES_OFFSET = 0.008;
+    private final static Double COORDINATES_OFFSET = 1.008;
     private final static long TIMER_PERIOD = 5000;
 
     DatabaseReference usersRef;
