@@ -256,6 +256,8 @@ public class UserService implements IUserService {
 
                     // save user
                     database.getReference().child("users").child(getCurrentUserId()).setValue(user);
+                }else{
+                    updateFirebaseInstanceIdToken(FirebaseInstanceId.getInstance().getToken());
                 }
             }
 
